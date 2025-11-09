@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - PanamAI</title>
+    <link rel="stylesheet" href="/assets/style.css">
+    <meta name="description" content="<%= description || 'PanamAI - Your Financial Intelligence Platform' %>">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="logo">PanamAI</a>
+            <ul class="nav-menu">
+                <li><a href="/" class="<%= page === 'home' ? 'active' : '' %>">Home</a></li>
+                <li><a href="/tutorials" class="<%= page === 'tutorials' ? 'active' : '' %>">Learn</a></li>
+                <li><a href="/tools" class="<%= page === 'tools' ? 'active' : '' %>">Tools</a></li>
+                <li><a href="/blog" class="<%= page === 'blog' ? 'active' : '' %>">Blog</a></li>
+                <li><a href="/consulting" class="<%= page === 'consulting' ? 'active' : '' %>">Advisory</a></li>
+                <li><a href="/aihub" class="<%= page === 'aihub' ? 'active' : '' %>">AI Hub</a></li>
+                <li><a href="/contact" class="<%= page === 'contact' ? 'active' : '' %>">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
