@@ -1,0 +1,217 @@
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h1>Welcome Back, <%= user.name %>!</h1>
+    <a href="/academy" class="btn btn-primary">
+        <i class="fas fa-graduation-cap"></i>
+        Trading Academy
+    </a>
+</div>
+
+<!-- Quick Actions -->
+<div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
+    <h3 style="color: var(--primary); margin-bottom: 1rem;">🚀 Quick Actions</h3>
+    <div class="grid grid-4" style="gap: 1rem;">
+        <a href="/academy" class="btn btn-outline-primary" style="display: flex; flex-direction: column; align-items: center; padding: 1rem; height: auto;">
+            <i class="fas fa-graduation-cap" style="font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+            <span>Learn Trading</span>
+        </a>
+        <a href="/portfolio" class="btn btn-outline-primary" style="display: flex; flex-direction: column; align-items: center; padding: 1rem; height: auto;">
+            <i class="fas fa-chart-pie" style="font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+            <span>Portfolio</span>
+        </a>
+        <a href="/screener" class="btn btn-outline-primary" style="display: flex; flex-direction: column; align-items: center; padding: 1rem; height: auto;">
+            <i class="fas fa-search" style="font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+            <span>Stock Screener</span>
+        </a>
+        <a href="/markets" class="btn btn-outline-primary" style="display: flex; flex-direction: column; align-items: center; padding: 1rem; height: auto;">
+            <i class="fas fa-chart-line" style="font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+            <span>Live Markets</span>
+        </a>
+    </div>
+</div>
+
+<!-- Financial Summary Cards -->
+<div class="summary-cards">
+    <div class="summary-card">
+        <div class="summary-value">₹ <%= summary.totalBankBalance.toLocaleString('en-IN') %></div>
+        <div class="summary-label">Total Bank Balance</div>
+    </div>
+    
+    <div class="summary-card">
+        <div class="summary-value">₹ <%= summary.monthlyExpenses.toLocaleString('en-IN') %></div>
+        <div class="summary-label">Monthly Expenses</div>
+    </div>
+    
+    <div class="summary-card">
+        <div class="summary-value">₹ <%= summary.totalInvestmentValue.toLocaleString('en-IN') %></div>
+        <div class="summary-label">Investment Value</div>
+    </div>
+    
+    <div class="summary-card">
+        <div class="summary-value">₹ <%= summary.totalInsuranceCoverage.toLocaleString('en-IN') %></div>
+        <div class="summary-label">Insurance Coverage</div>
+    </div>
+</div>
+
+<div class="grid grid-2">
+    <!-- Recent Transactions -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Recent Bank Transactions</h3>
+        </div>
+        <div class="card-body">
+            <% if (recentTransactions.length > 0) { %>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% recentTransactions.forEach(transaction => { %>
+                            <tr>
+                                <td><%= new Date(transaction.date).toLocaleDateString('en-IN') %></td>
+                                <td><%= transaction.description %></td>
+                                <td style="color: <%= transaction.type === 'credit' ? 'var(--success)' : 'var(--error)' %>">
+                                    <%= transaction.type === 'credit' ? '+' : '-' %>₹ <%= transaction.amount.toLocaleString('en-IN') %>
+                                </td>
+                                <td>
+                                    <span style="background: <%= transaction.type === 'credit' ? 'var(--success)' : 'var(--error)' %>; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">
+                                        <%= transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1) %>
+                                    </span>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p class="text-muted text-center">No transactions found. <a href="/accounts">Add your first account</a> to get started.</p>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Portfolio Overview -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Investment Portfolio</h3>
+        </div>
+        <div class="card-body">
+            <% if (portfolioSummary.length > 0) { %>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Instrument</th>
+                            <th>Units</th>
+                            <th>Current Value</th>
+                            <th>Return %</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% portfolioSummary.forEach(portfolio => { %>
+                            <tr>
+                                <td><%= portfolio.instrument %></td>
+                                <td><%= portfolio.units %></td>
+                                <td>₹ <%= portfolio.currentValue.toLocaleString('en-IN') %></td>
+                                <td style="color: <%= portfolio.returnPercentage >= 0 ? 'var(--success)' : 'var(--error)' %>">
+                                    <%= portfolio.returnPercentage.toFixed(2) %>%
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            <% } else { %>
+                <p class="text-muted text-center">No investments found. <a href="/portfolio">Start building your portfolio</a>.</p>
+            <% } %>
+        </div>
+    </div>
+</div>
+
+<!-- Insurance Summary -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Insurance Summary</h3>
+    </div>
+    <div class="card-body">
+        <% if (insuranceSummary.length > 0) { %>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Policy Type</th>
+                        <th>Policy Number</th>
+                        <th>Premium</th>
+                        <th>Status</th>
+                        <th>Alerts</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% insuranceSummary.forEach(insurance => { %>
+                        <tr>
+                            <td><%= insurance.policyType.charAt(0).toUpperCase() + insurance.policyType.slice(1) %></td>
+                            <td><%= insurance.policyNumber %></td>
+                            <td>₹ <%= insurance.premium.toLocaleString('en-IN') %></td>
+                            <td>
+                                <span style="background: <%= insurance.status === 'active' ? 'var(--success)' : 'var(--warning)' %>; color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">
+                                    <%= insurance.status.charAt(0).toUpperCase() + insurance.status.slice(1) %>
+                                </span>
+                            </td>
+                            <td>
+                                <% if (insurance.isExpiringSoon) { %>
+                                    <span style="background: var(--warning); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; margin-right: 0.25rem;">
+                                        Expiring Soon
+                                    </span>
+                                <% } %>
+                                <% if (insurance.isPremiumDueSoon) { %>
+                                    <span style="background: var(--error); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">
+                                        Premium Due
+                                    </span>
+                                <% } %>
+                                <% if (!insurance.isExpiringSoon && !insurance.isPremiumDueSoon) { %>
+                                    <span class="text-success">All Good</span>
+                                <% } %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p class="text-muted text-center">No insurance policies found. <a href="/insurance">Add your first policy</a>.</p>
+        <% } %>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="grid grid-4 mt-4">
+    <a href="/accounts" class="card" style="text-decoration: none; color: inherit;">
+        <div class="card-body text-center">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">💳</div>
+            <h4 style="color: var(--primary);">Manage Accounts</h4>
+            <p class="text-muted">Add transactions and view account details</p>
+        </div>
+    </a>
+    
+    <a href="/portfolio" class="card" style="text-decoration: none; color: inherit;">
+        <div class="card-body text-center">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📈</div>
+            <h4 style="color: var(--primary);">Portfolio</h4>
+            <p class="text-muted">Track your investments and returns</p>
+        </div>
+    </a>
+    
+    <a href="/insurance" class="card" style="text-decoration: none; color: inherit;">
+        <div class="card-body text-center">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🛡️</div>
+            <h4 style="color: var(--primary);">Insurance</h4>
+            <p class="text-muted">Manage your insurance policies</p>
+        </div>
+    </a>
+    
+    <a href="/advisor" class="card" style="text-decoration: none; color: inherit;">
+        <div class="card-body text-center">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🤖</div>
+            <h4 style="color: var(--primary);">Get Advice</h4>
+            <p class="text-muted">AI-powered financial insights</p>
+        </div>
+    </a>
+</div>

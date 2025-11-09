@@ -1,0 +1,495 @@
+<div style="max-width: 1200px; margin: 0 auto; padding: 2rem;">
+    <!-- Page Header -->
+    <div style="margin-bottom: 2rem; text-align: center;">
+        <h1 style="color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; gap: 1rem;">
+            <i class="fas fa-link" style="color: var(--secondary);"></i>
+            Zerodha Integration
+        </h1>
+        <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto;">
+            Connect your Zerodha account to import real portfolio data, track holdings, and monitor positions automatically.
+        </p>
+    </div>
+
+    <!-- Alert Messages -->
+    <% if (typeof message !== 'undefined') { %>
+        <div class="alert alert-<%= message.type %>" style="margin-bottom: 2rem;">
+            <i class="fas fa-<%= message.type === 'success' ? 'check-circle' : message.type === 'error' ? 'exclamation-circle' : 'info-circle' %>"></i>
+            <%= message.text %>
+        </div>
+    <% } %>
+
+    <% if (!isConnected) { %>
+        <!-- Connection Setup -->
+        <div class="card" style="margin-bottom: 2rem; padding: 2rem; text-align: center;">
+            <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #ff6600, #ff9933); border-radius: 50%; margin: 0 auto 2rem auto; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-chart-line" style="font-size: 3rem; color: white;"></i>
+            </div>
+            
+            <h2 style="color: var(--primary); margin-bottom: 1rem;">Connect Your Zerodha Account</h2>
+            <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 1.1rem;">
+                Securely connect your Zerodha trading account to automatically import your portfolio holdings, 
+                positions, and trading history into Project360.
+            </p>
+
+            <!-- Benefits -->
+            <div class="grid grid-3" style="gap: 1.5rem; margin: 2rem 0; text-align: left;">
+                <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="width: 60px; height: 60px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                        <i class="fas fa-wallet" style="color: white; font-size: 1.5rem;"></i>
+                    </div>
+                    <h4 style="color: var(--text); margin-bottom: 0.5rem;">Portfolio Sync</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">
+                        Automatically sync your holdings, quantities, and current values.
+                    </p>
+                </div>
+                
+                <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="width: 60px; height: 60px; background: var(--secondary); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                        <i class="fas fa-chart-area" style="color: white; font-size: 1.5rem;"></i>
+                    </div>
+                    <h4 style="color: var(--text); margin-bottom: 0.5rem;">Real-time Positions</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">
+                        Track your day trading positions and P&L in real-time.
+                    </p>
+                </div>
+                
+                <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border);">
+                    <div style="width: 60px; height: 60px; background: var(--success); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                        <i class="fas fa-shield-alt" style="color: white; font-size: 1.5rem;"></i>
+                    </div>
+                    <h4 style="color: var(--text); margin-bottom: 0.5rem;">Secure Connection</h4>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">
+                        Bank-level security with OAuth 2.0 authentication.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Connection Steps -->
+            <div style="background: var(--bg-secondary); padding: 2rem; border-radius: 12px; margin: 2rem 0; text-align: left;">
+                <h3 style="color: var(--primary); margin-bottom: 1.5rem; text-align: center;">How It Works</h3>
+                <div class="grid grid-2" style="gap: 2rem;">
+                    <div>
+                        <div style="display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem;">
+                            <div style="width: 30px; height: 30px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">1</div>
+                            <div>
+                                <h5 style="color: var(--text); margin-bottom: 0.5rem;">Click Connect</h5>
+                                <p style="color: var(--text-muted); font-size: 0.9rem;">You'll be redirected to Zerodha's secure login page.</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="width: 30px; height: 30px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">2</div>
+                            <div>
+                                <h5 style="color: var(--text); margin-bottom: 0.5rem;">Authorize Access</h5>
+                                <p style="color: var(--text-muted); font-size: 0.9rem;">Login with your Zerodha credentials and grant read-only access.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem;">
+                            <div style="width: 30px; height: 30px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">3</div>
+                            <div>
+                                <h5 style="color: var(--text); margin-bottom: 0.5rem;">Automatic Sync</h5>
+                                <p style="color: var(--text-muted); font-size: 0.9rem;">Your portfolio data will be securely imported.</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: flex-start; gap: 1rem;">
+                            <div style="width: 30px; height: 30px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; flex-shrink: 0;">4</div>
+                            <div>
+                                <h5 style="color: var(--text); margin-bottom: 0.5rem;">Start Managing</h5>
+                                <p style="color: var(--text-muted); font-size: 0.9rem;">View and manage your portfolio within Project360.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Note -->
+            <div style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.2); border-radius: 8px; padding: 1rem; margin: 2rem 0;">
+                <p style="color: var(--success); margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-lock"></i>
+                    <strong>Security Note:</strong> This connection is read-only. We cannot place trades or access your funds.
+                </p>
+            </div>
+
+            <!-- Connect Button -->
+            <a href="/zerodha/connect" class="btn btn-primary btn-lg" style="padding: 1rem 3rem; font-size: 1.1rem; display: inline-flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-link"></i>
+                Connect Zerodha Account
+            </a>
+        </div>
+
+    <% } else { %>
+        <!-- Connected State -->
+        <div class="grid grid-2" style="gap: 2rem; margin-bottom: 2rem;">
+            <!-- Profile Card -->
+            <div class="card" style="padding: 2rem;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #ff6600, #ff9933); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-user" style="color: white; font-size: 1.5rem;"></i>
+                    </div>
+                    <div>
+                        <h3 style="color: var(--primary); margin: 0;">
+                            <% if (zerodhaProfile) { %>
+                                <%= zerodhaProfile.user_name || zerodhaProfile.localIntegration?.zerodhaUserName || 'Connected' %>
+                            <% } else { %>
+                                Zerodha Connected
+                            <% } %>
+                        </h3>
+                        <p style="color: var(--text-muted); margin: 0;">
+                            <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                            Account Connected
+                        </p>
+                    </div>
+                </div>
+
+                <% if (zerodhaProfile) { %>
+                    <div style="margin-bottom: 1.5rem;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.9rem;">
+                            <div>
+                                <span style="color: var(--text-muted);">User ID:</span><br>
+                                <strong style="color: var(--text);"><%= zerodhaProfile.user_id || 'N/A' %></strong>
+                            </div>
+                            <div>
+                                <span style="color: var(--text-muted);">Broker:</span><br>
+                                <strong style="color: var(--text);"><%= zerodhaProfile.broker || 'Zerodha' %></strong>
+                            </div>
+                            <div>
+                                <span style="color: var(--text-muted);">Email:</span><br>
+                                <strong style="color: var(--text);"><%= zerodhaProfile.email || 'N/A' %></strong>
+                            </div>
+                            <div>
+                                <span style="color: var(--text-muted);">Last Sync:</span><br>
+                                <strong style="color: var(--text);">
+                                    <% if (zerodhaProfile.localIntegration?.lastSyncAt) { %>
+                                        <%= new Date(zerodhaProfile.localIntegration.lastSyncAt).toLocaleString() %>
+                                    <% } else { %>
+                                        Just now
+                                    <% } %>
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button onclick="syncPortfolio()" class="btn btn-secondary" style="flex: 1;">
+                        <i class="fas fa-sync-alt"></i>
+                        Sync Now
+                    </button>
+                    <button onclick="disconnectAccount()" class="btn btn-outline-danger" style="flex: 1;">
+                        <i class="fas fa-unlink"></i>
+                        Disconnect
+                    </button>
+                </div>
+            </div>
+
+            <!-- Portfolio Summary -->
+            <div class="card" style="padding: 2rem;">
+                <h3 style="color: var(--primary); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-chart-pie"></i>
+                    Portfolio Summary
+                </h3>
+
+                <% if (portfolioSummary && portfolioSummary.summary) { %>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="text-align: center; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary);">
+                                ₹<%= portfolioSummary.summary.totalCurrent.toLocaleString('en-IN', {maximumFractionDigits: 0}) %>
+                            </div>
+                            <div style="color: var(--text-muted); font-size: 0.9rem;">Current Value</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: <%= portfolioSummary.summary.totalPnL >= 0 ? 'var(--success)' : 'var(--danger)' %>;">
+                                <%= portfolioSummary.summary.totalPnL >= 0 ? '+' : '' %>₹<%= portfolioSummary.summary.totalPnL.toLocaleString('en-IN', {maximumFractionDigits: 0}) %>
+                            </div>
+                            <div style="color: var(--text-muted); font-size: 0.9rem;">Total P&L</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--text);">
+                                <%= portfolioSummary.summary.holdingsCount %>
+                            </div>
+                            <div style="color: var(--text-muted); font-size: 0.9rem;">Holdings</div>
+                        </div>
+                        <div style="text-align: center; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                            <div style="font-size: 1.5rem; font-weight: 700; color: <%= portfolioSummary.summary.totalReturn >= 0 ? 'var(--success)' : 'var(--danger)' %>;">
+                                <%= portfolioSummary.summary.totalReturn >= 0 ? '+' : '' %><%= portfolioSummary.summary.totalReturn.toFixed(2) %>%
+                            </div>
+                            <div style="color: var(--text-muted); font-size: 0.9rem;">Returns</div>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                        <i class="fas fa-chart-line" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <p>Loading portfolio data...</p>
+                        <button onclick="syncPortfolio()" class="btn btn-primary btn-sm">
+                            <i class="fas fa-sync-alt"></i>
+                            Load Data
+                        </button>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- Holdings Table -->
+        <% if (portfolioSummary && portfolioSummary.holdings && portfolioSummary.holdings.length > 0) { %>
+            <div class="card" style="padding: 2rem; margin-bottom: 2rem;">
+                <h3 style="color: var(--primary); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-list"></i>
+                    Holdings
+                </h3>
+
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border);">
+                                <th style="padding: 1rem; text-align: left; color: var(--text); font-weight: 600;">Symbol</th>
+                                <th style="padding: 1rem; text-align: right; color: var(--text); font-weight: 600;">Qty</th>
+                                <th style="padding: 1rem; text-align: right; color: var(--text); font-weight: 600;">Avg Price</th>
+                                <th style="padding: 1rem; text-align: right; color: var(--text); font-weight: 600;">LTP</th>
+                                <th style="padding: 1rem; text-align: right; color: var(--text); font-weight: 600;">Current Value</th>
+                                <th style="padding: 1rem; text-align: right; color: var(--text); font-weight: 600;">P&L</th>
+                                <th style="padding: 1rem; text-align: right; color: var(--text); font-weight: 600;">Returns</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% portfolioSummary.holdings.forEach((holding, index) => { %>
+                                <tr style="border-bottom: 1px solid var(--border); <%= index % 2 === 0 ? 'background: var(--bg-secondary);' : '' %>">
+                                    <td style="padding: 1rem;">
+                                        <div>
+                                            <strong style="color: var(--text);"><%= holding.tradingsymbol %></strong>
+                                            <div style="color: var(--text-muted); font-size: 0.8rem;"><%= holding.exchange %></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 1rem; text-align: right; color: var(--text);">
+                                        <%= holding.quantity %>
+                                    </td>
+                                    <td style="padding: 1rem; text-align: right; color: var(--text);">
+                                        ₹<%= holding.averagePrice.toFixed(2) %>
+                                    </td>
+                                    <td style="padding: 1rem; text-align: right; color: var(--text);">
+                                        ₹<%= holding.lastPrice.toFixed(2) %>
+                                    </td>
+                                    <td style="padding: 1rem; text-align: right; color: var(--text);">
+                                        ₹<%= holding.currentValue.toLocaleString('en-IN', {maximumFractionDigits: 0}) %>
+                                    </td>
+                                    <td style="padding: 1rem; text-align: right; color: <%= holding.absoluteReturn >= 0 ? 'var(--success)' : 'var(--danger)' %>;">
+                                        <%= holding.absoluteReturn >= 0 ? '+' : '' %>₹<%= holding.absoluteReturn.toFixed(2) %>
+                                    </td>
+                                    <td style="padding: 1rem; text-align: right; color: <%= holding.returnPercentage >= 0 ? 'var(--success)' : 'var(--danger)' %>;">
+                                        <%= holding.returnPercentage >= 0 ? '+' : '' %><%= holding.returnPercentage.toFixed(2) %>%
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <% } %>
+
+        <!-- Positions -->
+        <% if (portfolioSummary && portfolioSummary.positions && portfolioSummary.positions.netPositions && portfolioSummary.positions.netPositions.length > 0) { %>
+            <div class="card" style="padding: 2rem;">
+                <h3 style="color: var(--primary); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-exchange-alt"></i>
+                    Open Positions
+                </h3>
+
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border);">
+                                <th style="padding: 1rem; text-align: left; color: var(--text); font-weight: 600;">Symbol</th>
+                                <th style="padding: 1rem; text-align: right; color: var(--text); font-weight: 600;">Qty</th>
+                                <th style="padding: 1rem; text-align: right; color: var(--text); font-weight: 600;">Avg Price</th>
+                                <th style="padding: 1rem; text-align: right; color: var(--text); font-weight: 600;">LTP</th>
+                                <th style="padding: 1rem; text-align: right; color: var(--text); font-weight: 600;">P&L</th>
+                                <th style="padding: 1rem; text-align: left; color: var(--text); font-weight: 600;">Product</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% portfolioSummary.positions.netPositions.forEach((position, index) => { %>
+                                <tr style="border-bottom: 1px solid var(--border); <%= index % 2 === 0 ? 'background: var(--bg-secondary);' : '' %>">
+                                    <td style="padding: 1rem;">
+                                        <div>
+                                            <strong style="color: var(--text);"><%= position.tradingsymbol %></strong>
+                                            <div style="color: var(--text-muted); font-size: 0.8rem;"><%= position.exchange %></div>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 1rem; text-align: right; color: var(--text);">
+                                        <%= position.quantity %>
+                                    </td>
+                                    <td style="padding: 1rem; text-align: right; color: var(--text);">
+                                        ₹<%= position.averagePrice.toFixed(2) %>
+                                    </td>
+                                    <td style="padding: 1rem; text-align: right; color: var(--text);">
+                                        ₹<%= position.lastPrice.toFixed(2) %>
+                                    </td>
+                                    <td style="padding: 1rem; text-align: right; color: <%= position.pnl >= 0 ? 'var(--success)' : 'var(--danger)' %>;">
+                                        <%= position.pnl >= 0 ? '+' : '' %>₹<%= position.pnl.toFixed(2) %>
+                                    </td>
+                                    <td style="padding: 1rem; color: var(--text);">
+                                        <%= position.product %>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <% } %>
+    <% } %>
+</div>
+
+<script>
+async function syncPortfolio() {
+    const button = event.target;
+    const originalText = button.innerHTML;
+    
+    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Syncing...';
+    button.disabled = true;
+    
+    try {
+        const response = await fetch('/zerodha/sync', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showToast('Portfolio synchronized successfully!', 'success');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        } else {
+            throw new Error(data.error || 'Sync failed');
+        }
+    } catch (error) {
+        console.error('Sync error:', error);
+        showToast('Failed to sync portfolio: ' + error.message, 'error');
+    } finally {
+        button.innerHTML = originalText;
+        button.disabled = false;
+    }
+}
+
+async function disconnectAccount() {
+    if (!confirm('Are you sure you want to disconnect your Zerodha account? This will remove access to your portfolio data.')) {
+        return;
+    }
+    
+    try {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/zerodha/disconnect';
+        document.body.appendChild(form);
+        form.submit();
+    } catch (error) {
+        console.error('Disconnect error:', error);
+        showToast('Failed to disconnect account', 'error');
+    }
+}
+
+function showToast(message, type) {
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        background: ${type === 'success' ? 'var(--success)' : 'var(--danger)'};
+        color: white;
+        border-radius: 8px;
+        z-index: 1000;
+        opacity: 0;
+        transform: translateX(100%);
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    `;
+    
+    toast.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+            ${message}
+        </div>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    // Animate in
+    setTimeout(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Remove after 4 seconds
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 300);
+    }, 4000);
+}
+
+// Auto-refresh portfolio data every 5 minutes if connected
+<% if (isConnected) { %>
+    setInterval(async () => {
+        try {
+            const response = await fetch('/zerodha/status');
+            const data = await response.json();
+            
+            if (!data.success || !data.data.isConnected) {
+                console.log('Zerodha connection lost, reloading page...');
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error('Error checking connection status:', error);
+        }
+    }, 5 * 60 * 1000); // 5 minutes
+<% } %>
+</script>
+
+<style>
+/* Responsive table */
+@media (max-width: 768px) {
+    table {
+        font-size: 0.8rem;
+    }
+    
+    th, td {
+        padding: 0.5rem !important;
+    }
+}
+
+/* Loading animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.fa-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Card hover effects */
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+/* Grid responsive */
+@media (max-width: 768px) {
+    .grid-2 {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .grid-3 {
+        grid-template-columns: 1fr !important;
+    }
+}
+</style>

@@ -1,0 +1,244 @@
+<div class="broker-connect-form">
+    <% if (broker.type === 'api') { %>
+        <!-- API Broker (like Zerodha) -->
+        <div class="text-center mb-4">
+            <div class="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style="background: <%= broker.color %>15; color: <%= broker.color %>">
+                <i class="<%= broker.icon %> text-2xl"></i>
+            </div>
+            <h4 class="text-lg font-semibold text-gray-900">Connect <%= broker.name %></h4>
+            <p class="text-gray-600">Secure API integration for real-time portfolio sync</p>
+        </div>
+
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+            <div class="flex items-start gap-3">
+                <i class="fas fa-info-circle text-blue-600 mt-1"></i>
+                <div>
+                    <h5 class="font-semibold text-blue-900 mb-2">API Integration Benefits:</h5>
+                    <ul class="text-sm text-blue-800 space-y-1">
+                        <li>• Real-time portfolio updates</li>
+                        <li>• Automatic holdings synchronization</li>
+                        <li>• Live positions and P&L tracking</li>
+                        <li>• Order history and margin information</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button type="button" class="btn btn-primary btn-lg" onclick="initiateAPIConnection('<%= broker.id %>')">
+                <i class="fas fa-link mr-2"></i>
+                Connect via <%= broker.name %> API
+            </button>
+            <p class="text-sm text-gray-500 mt-3">
+                You'll be redirected to <%= broker.name %> to authorize the connection
+            </p>
+        </div>
+
+    <% } else { %>
+        <!-- Manual Broker (like Axis Direct, INDmoney) -->
+        <div class="text-center mb-4">
+            <div class="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style="background: <%= broker.color %>15; color: <%= broker.color %>">
+                <i class="<%= broker.icon %> text-2xl"></i>
+            </div>
+            <h4 class="text-lg font-semibold text-gray-900">Connect <%= broker.name %></h4>
+            <p class="text-gray-600">Manual integration with portfolio import capabilities</p>
+        </div>
+
+        <form id="connectManualBrokerForm" onsubmit="connectManualBroker(event, '<%= broker.id %>')">
+            <div class="space-y-4">
+                <div>
+                    <label class="form-label">
+                        <i class="fas fa-envelope text-gray-500 mr-2"></i>
+                        Email Address
+                    </label>
+                    <input type="email" 
+                           name="email" 
+                           class="form-control" 
+                           placeholder="Your <%= broker.name %> account email"
+                           required>
+                    <small class="text-gray-500">Used for receiving portfolio statements</small>
+                </div>
+
+                <div>
+                    <label class="form-label">
+                        <i class="fas fa-id-card text-gray-500 mr-2"></i>
+                        Account Number (Optional)
+                    </label>
+                    <input type="text" 
+                           name="accountNumber" 
+                           class="form-control" 
+                           placeholder="Your <%= broker.name %> account number">
+                    <small class="text-gray-500">For easier identification of your account</small>
+                </div>
+
+                <div>
+                    <label class="form-label">
+                        <i class="fas fa-user text-gray-500 mr-2"></i>
+                        Display Name
+                    </label>
+                    <input type="text" 
+                           name="userProfile" 
+                           class="form-control" 
+                           placeholder="How you want this account displayed"
+                           value="<%= broker.name %> Account">
+                    <small class="text-gray-500">This name will appear in your portfolio dashboard</small>
+                </div>
+
+                <% if (broker.features.includes('email_parsing')) { %>
+                <div class="form-check">
+                    <input type="checkbox" 
+                           name="enableEmailParsing" 
+                           id="enableEmailParsing" 
+                           class="form-check-input">
+                    <label class="form-check-label" for="enableEmailParsing">
+                        <strong>Enable Email Statement Parsing</strong>
+                        <br><small class="text-gray-600">
+                            Automatically parse portfolio updates from <%= broker.name %> emails
+                        </small>
+                    </label>
+                </div>
+                <% } %>
+            </div>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-4">
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-exclamation-triangle text-yellow-600 mt-1"></i>
+                    <div>
+                        <h5 class="font-semibold text-yellow-900 mb-2">Manual Integration Notice:</h5>
+                        <ul class="text-sm text-yellow-800 space-y-1">
+                            <li>• Portfolio data needs to be imported manually via CSV/Excel files</li>
+                            <li>• Real-time updates are not available for manual integrations</li>
+                            <li>• You'll need to re-import data periodically to keep it current</li>
+                            <% if (broker.features.includes('email_parsing')) { %>
+                            <li>• Email parsing can help automate some updates</li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-3 mt-4">
+                <button type="button" class="btn btn-secondary flex-1" data-bs-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="submit" class="btn btn-primary flex-1">
+                    <i class="fas fa-link mr-2"></i>
+                    Connect Account
+                </button>
+            </div>
+        </form>
+    <% } %>
+</div>
+
+<script>
+async function initiateAPIConnection(brokerId) {
+    try {
+        showLoading('Connecting to ' + '<%= broker.name %>' + '...');
+        
+        const response = await fetch(`/brokers/${brokerId}/connect`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({})
+        });
+        
+        const data = await response.json();
+        
+        if (data.success && data.redirectUrl) {
+            // Close modal and redirect to broker login
+            const modal = bootstrap.Modal.getInstance(document.getElementById('connectBrokerModal'));
+            modal.hide();
+            
+            showToast('Redirecting to <%= broker.name %> login...', 'info');
+            setTimeout(() => {
+                window.location.href = data.redirectUrl;
+            }, 1000);
+        } else {
+            showToast(data.error || 'Failed to initiate connection', 'error');
+        }
+    } catch (error) {
+        console.error('Error initiating API connection:', error);
+        showToast('Error connecting to <%= broker.name %>', 'error');
+    } finally {
+        hideLoading();
+    }
+}
+
+async function connectManualBroker(event, brokerId) {
+    event.preventDefault();
+    
+    try {
+        showLoading('Connecting <%= broker.name %> account...');
+        
+        const formData = new FormData(event.target);
+        const connectionData = {
+            email: formData.get('email'),
+            accountNumber: formData.get('accountNumber'),
+            userProfile: formData.get('userProfile'),
+            enableEmailParsing: formData.get('enableEmailParsing') === 'on'
+        };
+        
+        const response = await fetch(`/brokers/${brokerId}/connect`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(connectionData)
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            // Close modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('connectBrokerModal'));
+            modal.hide();
+            
+            showToast(data.data.message, 'success');
+            
+            // Show next steps
+            setTimeout(() => {
+                showNextSteps(brokerId, data.data.nextSteps);
+            }, 1500);
+            
+            // Reload page after showing next steps
+            setTimeout(() => {
+                location.reload();
+            }, 5000);
+        } else {
+            showToast(data.error || 'Failed to connect account', 'error');
+        }
+    } catch (error) {
+        console.error('Error connecting manual broker:', error);
+        showToast('Error connecting account', 'error');
+    } finally {
+        hideLoading();
+    }
+}
+
+function showNextSteps(brokerId, steps) {
+    const stepsHtml = steps.map(step => `<li class="flex items-start gap-2">
+        <i class="fas fa-check-circle text-green-500 mt-1"></i>
+        <span>${step}</span>
+    </li>`).join('');
+    
+    const toast = `
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <h5 class="alert-heading">
+                <i class="fas fa-info-circle"></i>
+                Next Steps for <%= broker.name %>
+            </h5>
+            <ul class="list-unstyled mt-3">
+                ${stepsHtml}
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    `;
+    
+    // Show toast notification
+    const container = document.createElement('div');
+    container.innerHTML = toast;
+    document.body.appendChild(container);
+    
+    // Auto remove after 8 seconds
+    setTimeout(() => {
+        container.remove();
+    }, 8000);
+}
+</script>

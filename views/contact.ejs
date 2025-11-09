@@ -1,0 +1,150 @@
+<div style="max-width: 600px; margin: 0 auto;">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Contact Support</h2>
+        </div>
+        <div class="card-body">
+            <p class="text-muted mb-3">
+                Have questions or need help? Our support team is here to assist you. 
+                Send us a message and we'll get back to you as soon as possible.
+            </p>
+            <div class="alert alert-info" style="margin-bottom: 1.5rem;">
+                <strong>📧 Direct Support:</strong> You can also email us directly at 
+                <a href="mailto:fix.project360@gmail.com" style="color: var(--primary); text-decoration: none; font-weight: 600;">fix.project360@gmail.com</a>
+            </div>
+
+            <div id="contactAlert" style="display: none;" class="alert"></div>
+            
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="name" class="form-label">Your Name</label>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Your Email</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email address" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject" class="form-label">Subject</label>
+                    <select id="subject" name="subject" class="form-control" required>
+                        <option value="">Select a topic</option>
+                        <option value="General Inquiry">General Inquiry</option>
+                        <option value="Technical Support">Technical Support</option>
+                        <option value="Billing Question">Billing Question</option>
+                        <option value="Feature Request">Feature Request</option>
+                        <option value="Bug Report">Bug Report</option>
+                        <option value="Account Help">Account Help</option>
+                        <option value="Tax Calculator">Tax Calculator</option>
+                        <option value="Portfolio Management">Portfolio Management</option>
+                        <option value="Insurance Help">Insurance Help</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message" class="form-label">Message</label>
+                    <textarea id="message" name="message" class="form-control" rows="6" placeholder="Describe your question or issue in detail" required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <span id="submitText">Send Message</span>
+                    <span id="submitSpinner" style="display: none;">Sending...</span>
+                </button>
+            </form>
+            
+            <script>
+            document.getElementById('contactForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const submitBtn = document.getElementById('submitBtn');
+                const submitText = document.getElementById('submitText');
+                const submitSpinner = document.getElementById('submitSpinner');
+                const alertDiv = document.getElementById('contactAlert');
+                
+                // Disable button and show loading
+                submitBtn.disabled = true;
+                submitText.style.display = 'none';
+                submitSpinner.style.display = 'inline';
+                
+                try {
+                    const formData = new FormData(this);
+                    const data = Object.fromEntries(formData);
+                    
+                    const response = await fetch('/contact', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        // Show success message
+                        alertDiv.className = 'alert alert-success';
+                        alertDiv.innerHTML = `
+                            <strong>✅ Message Sent Successfully!</strong><br>
+                            ${result.message}
+                        `;
+                        alertDiv.style.display = 'block';
+                        
+                        // Reset form
+                        this.reset();
+                        
+                        // Show toast notification if available
+                        if (typeof showToast === 'function') {
+                            showToast('✅ Message sent successfully! We will get back to you soon.', 'success');
+                        }
+                        
+                        // Scroll to alert
+                        alertDiv.scrollIntoView({ behavior: 'smooth' });
+                        
+                    } else {
+                        throw new Error(result.error || 'Failed to send message');
+                    }
+                    
+                } catch (error) {
+                    console.error('Contact form error:', error);
+                    alertDiv.className = 'alert alert-error';
+                    alertDiv.innerHTML = `
+                        <strong>❌ Error:</strong><br>
+                        ${error.message || 'There was an error sending your message. Please try again later.'}
+                    `;
+                    alertDiv.style.display = 'block';
+                    alertDiv.scrollIntoView({ behavior: 'smooth' });
+                    
+                } finally {
+                    // Re-enable button
+                    submitBtn.disabled = false;
+                    submitText.style.display = 'inline';
+                    submitSpinner.style.display = 'none';
+                }
+            });
+            </script>
+        </div>
+    </div>
+
+    <!-- Additional Support Information -->
+    <div class="grid grid-2 mt-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">📧</div>
+                <h4 style="color: var(--primary);">Email Support</h4>
+                <p class="text-muted">fix.project360@gmail.com</p>
+                <p class="text-muted">We typically respond within 24 hours</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body text-center">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">📚</div>
+                <h4 style="color: var(--primary);">Help Center</h4>
+                <p class="text-muted">Browse our knowledge base</p>
+                <a href="#" class="btn btn-secondary btn-sm">Visit Help Center</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,677 @@
+<div class="academy-container">
+    <!-- Academy Header -->
+    <div class="academy-header">
+        <div class="academy-hero">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <i class="fas fa-graduation-cap"></i>
+                    Trading Academy
+                </h1>
+                <p class="hero-subtitle">Master Trading with Smart Money Concepts</p>
+                <p class="hero-description">
+                    Learn from comprehensive trading education covering price action, smart money strategies, 
+                    risk management, and advanced trading techniques. Based on proven institutional methods.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">Sections</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">100+</div>
+                        <div class="stat-label">Lessons</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">Free</div>
+                        <div class="stat-label">Access</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Learning Path -->
+    <div class="learning-path">
+        <h2 class="section-title">
+            <i class="fas fa-route"></i>
+            Your Learning Journey
+        </h2>
+        <div class="path-steps">
+            <div class="path-step">
+                <div class="step-icon"><i class="fas fa-play"></i></div>
+                <div class="step-content">
+                    <h3>Start with Basics</h3>
+                    <p>Begin with Price Action and Market Structure</p>
+                </div>
+            </div>
+            <div class="path-connector"></div>
+            <div class="path-step">
+                <div class="step-icon"><i class="fas fa-brain"></i></div>
+                <div class="step-content">
+                    <h3>Learn Smart Money</h3>
+                    <p>Understand institutional trading concepts</p>
+                </div>
+            </div>
+            <div class="path-connector"></div>
+            <div class="path-step">
+                <div class="step-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="step-content">
+                    <h3>Advanced Strategies</h3>
+                    <p>Master complex trading strategies</p>
+                </div>
+            </div>
+            <div class="path-connector"></div>
+            <div class="path-step">
+                <div class="step-icon"><i class="fas fa-trophy"></i></div>
+                <div class="step-content">
+                    <h3>Trade Like a Pro</h3>
+                    <p>Apply institutional-level techniques</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Course Sections -->
+    <div class="academy-sections">
+        <h2 class="section-title">
+            <i class="fas fa-book-open"></i>
+            Course Sections
+        </h2>
+        
+        <div class="sections-grid">
+            <% academyData.sections.forEach((section, index) => { %>
+                <div class="section-card" data-difficulty="<%= index < 3 ? 'beginner' : index < 6 ? 'intermediate' : 'advanced' %>">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="<%= section.icon %>"></i>
+                        </div>
+                        <div class="section-info">
+                            <h3 class="section-name"><%= section.title %></h3>
+                            <p class="section-description"><%= section.description %></p>
+                        </div>
+                    </div>
+                    
+                    <div class="section-meta">
+                        <div class="lesson-count">
+                            <i class="fas fa-video"></i>
+                            <%= section.lessons.length %> Lessons
+                        </div>
+                        <div class="difficulty-badge">
+                            <% if (index < 3) { %>
+                                <span class="badge badge-success">Beginner</span>
+                            <% } else if (index < 6) { %>
+                                <span class="badge badge-warning">Intermediate</span>
+                            <% } else { %>
+                                <span class="badge badge-danger">Advanced</span>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <div class="section-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text">0% Complete</span>
+                    </div>
+
+                    <div class="section-actions">
+                        <a href="/academy/section/<%= section.id %>" class="btn btn-primary btn-block">
+                            <i class="fas fa-play"></i>
+                            Start Learning
+                        </a>
+                    </div>
+
+                    <!-- Lesson Preview -->
+                    <div class="lesson-preview">
+                        <h4>First Few Lessons:</h4>
+                        <ul>
+                            <% section.lessons.slice(0, 3).forEach(lesson => { %>
+                                <li>
+                                    <i class="fas fa-play-circle"></i>
+                                    <%= lesson.title %>
+                                </li>
+                            <% }); %>
+                            <% if (section.lessons.length > 3) { %>
+                                <li class="more-lessons">
+                                    <i class="fas fa-plus"></i>
+                                    +<%= section.lessons.length - 3 %> more lessons
+                                </li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="academy-features">
+        <h2 class="section-title">
+            <i class="fas fa-star"></i>
+            Why Choose Our Academy?
+        </h2>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-university"></i>
+                </div>
+                <h3>Institutional Level</h3>
+                <p>Learn the same concepts used by hedge funds and professional traders</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Real Market Examples</h3>
+                <p>Every concept explained with live market examples and case studies</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-infinity"></i>
+                </div>
+                <h3>Lifetime Access</h3>
+                <p>Once enrolled, access all content forever with free updates</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3>Mobile Friendly</h3>
+                <p>Learn anywhere, anytime on any device</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="academy-faq">
+        <h2 class="section-title">
+            <i class="fas fa-question-circle"></i>
+            Frequently Asked Questions
+        </h2>
+        
+        <div class="faq-list">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Is this suitable for beginners?</h3>
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes! We start with fundamental concepts and gradually progress to advanced topics. Each section builds upon the previous one.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How long does it take to complete?</h3>
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>The pace is self-directed. Most students complete the entire curriculum in 3-6 months while practicing on demo accounts.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Do I need any special software?</h3>
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Just a web browser and access to trading charts (we recommend TradingView which is free).</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.academy-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.academy-header {
+    margin-bottom: 3rem;
+}
+
+.academy-hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    color: white;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.academy-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+    animation: float 20s linear infinite;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.hero-description {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    max-width: 800px;
+    margin: 0 auto 2rem auto;
+    line-height: 1.6;
+    position: relative;
+}
+
+.hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 2rem;
+    position: relative;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    display: block;
+}
+
+.stat-label {
+    font-size: 1rem;
+    opacity: 0.8;
+    margin-top: 0.5rem;
+}
+
+.learning-path {
+    margin-bottom: 3rem;
+}
+
+.section-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.path-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+.path-step {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    min-width: 200px;
+}
+
+.step-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.step-content h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+}
+
+.step-content p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.path-connector {
+    width: 50px;
+    height: 2px;
+    background: var(--primary);
+    opacity: 0.3;
+}
+
+.sections-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.section-card {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.section-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.section-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.section-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+
+.section-description {
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.section-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.lesson-count {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.lesson-count i {
+    margin-right: 0.5rem;
+    color: var(--primary);
+}
+
+.badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.badge-success { background: rgba(34, 197, 94, 0.1); color: #22c55e; }
+.badge-warning { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+.badge-danger { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+.section-progress {
+    margin-bottom: 1.5rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.lesson-preview {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+}
+
+.lesson-preview h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+
+.lesson-preview ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.lesson-preview li {
+    padding: 0.5rem 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.lesson-preview li i {
+    color: var(--primary);
+    width: 16px;
+}
+
+.more-lessons {
+    font-style: italic;
+    opacity: 0.7;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.feature-card {
+    text-align: center;
+    padding: 2rem;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.feature-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    margin: 0 auto 1.5rem auto;
+}
+
+.feature-card h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+
+.feature-card p {
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.faq-list {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+.faq-question {
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    background: var(--bg-secondary);
+    transition: background 0.3s ease;
+}
+
+.faq-question:hover {
+    background: var(--bg-tertiary);
+}
+
+.faq-question h3 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text);
+    margin: 0;
+}
+
+.faq-question i {
+    color: var(--primary);
+    transition: transform 0.3s ease;
+}
+
+.faq-answer {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    display: none;
+}
+
+.faq-answer p {
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.faq-item.active .faq-question i {
+    transform: rotate(45deg);
+}
+
+.faq-item.active .faq-answer {
+    display: block;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+@media (max-width: 768px) {
+    .hero-title { font-size: 2.5rem; }
+    .hero-stats { gap: 2rem; }
+    .path-steps { flex-direction: column; }
+    .path-connector { display: none; }
+    .sections-grid { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<script>
+// FAQ Toggle
+document.querySelectorAll('.faq-question').forEach(question => {
+    question.addEventListener('click', () => {
+        const faqItem = question.parentElement;
+        const isActive = faqItem.classList.contains('active');
+        
+        // Close all FAQ items
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // Open clicked item if it wasn't active
+        if (!isActive) {
+            faqItem.classList.add('active');
+        }
+    });
+});
+
+// Animate on scroll
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.section-card, .feature-card').forEach(card => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(30px)';
+    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(card);
+});
+</script>

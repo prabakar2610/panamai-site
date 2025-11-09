@@ -1,0 +1,641 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <!-- Header -->
+    <div class="bg-white border-b border-gray-200 sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
+                        <i class="fas fa-user-circle text-blue-600"></i>
+                        My Profile
+                    </h1>
+                    <p class="text-gray-600 mt-2">Manage your account settings and preferences</p>
+                </div>
+                <div class="flex gap-3">
+                    <button class="btn btn-outline-primary" onclick="exportUserData()">
+                        <i class="fas fa-download mr-2"></i>
+                        Export Data
+                    </button>
+                    <button class="btn btn-primary" onclick="showEditProfileModal()">
+                        <i class="fas fa-edit mr-2"></i>
+                        Edit Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Profile Overview -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            <!-- Profile Card -->
+            <div class="lg:col-span-1">
+                <div class="card glass-effect p-8 text-center">
+                    <div class="relative inline-block mb-4">
+                        <div class="profile-picture-container">
+                            <% if (profileData.personalInfo.profilePicture) { %>
+                                <img src="<%= profileData.personalInfo.profilePicture %>" 
+                                     alt="Profile Picture" 
+                                     class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
+                                     id="profileImage">
+                            <% } else { %>
+                                <div class="w-32 h-32 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center border-4 border-white shadow-lg"
+                                     id="profileImage">
+                                    <span class="text-white text-4xl font-bold">
+                                        <%= profileData.personalInfo.name.charAt(0).toUpperCase() %>
+                                    </span>
+                                </div>
+                            <% } %>
+                            <button class="absolute bottom-0 right-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 transition-colors"
+                                    onclick="uploadProfilePicture()">
+                                <i class="fas fa-camera text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2"><%= profileData.personalInfo.name %></h2>
+                    <p class="text-gray-600 mb-4"><%= profileData.personalInfo.email %></p>
+                    
+                    <div class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium mb-4
+                                <% if (profileData.accountInfo.isAdmin) { %>
+                                    bg-purple-100 text-purple-800
+                                <% } else if (profileData.accountInfo.subscription === 'premium') { %>
+                                    bg-gold-100 text-gold-800
+                                <% } else if (profileData.accountInfo.subscription === 'pro') { %>
+                                    bg-blue-100 text-blue-800
+                                <% } else { %>
+                                    bg-gray-100 text-gray-800
+                                <% } %>">
+                        <i class="<%= profileData.accountInfo.isAdmin ? 'fas fa-crown' : 
+                                   profileData.accountInfo.subscription === 'premium' ? 'fas fa-gem' :
+                                   profileData.accountInfo.subscription === 'pro' ? 'fas fa-star' : 'fas fa-user' %> mr-2"></i>
+                        <%= profileData.accountInfo.isAdmin ? 'Admin Account' :
+                            profileData.accountInfo.subscription === 'premium' ? 'Premium Member' :
+                            profileData.accountInfo.subscription === 'pro' ? 'Pro Member' : 'Free Member' %>
+                    </div>
+
+                    <!-- Profile Completeness -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-medium text-gray-700">Profile Completeness</span>
+                            <span class="text-sm font-bold text-blue-600"><%= profileData.statistics.profileCompleteness %>%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div class="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full transition-all duration-300"
+                                 style="width: <%= profileData.statistics.profileCompleteness %>%"></div>
+                        </div>
+                        <% if (profileData.statistics.profileCompleteness < 100) { %>
+                        <p class="text-xs text-gray-500 mt-2">
+                            Complete your profile to unlock all features
+                        </p>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Information -->
+            <div class="lg:col-span-2">
+                <div class="card glass-effect">
+                    <div class="card-header border-0">
+                        <h3 class="text-xl font-semibold text-gray-900">
+                            <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+                            Account Information
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">Full Name</label>
+                                <p class="text-gray-900 font-medium"><%= profileData.personalInfo.name %></p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">Email Address</label>
+                                <p class="text-gray-900 font-medium">
+                                    <%= profileData.personalInfo.email %>
+                                    <% if (profileData.accountInfo.emailVerified) { %>
+                                        <i class="fas fa-check-circle text-green-500 ml-2" title="Verified"></i>
+                                    <% } else { %>
+                                        <i class="fas fa-exclamation-circle text-orange-500 ml-2" title="Not Verified"></i>
+                                    <% } %>
+                                </p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">Phone Number</label>
+                                <p class="text-gray-900 font-medium">
+                                    <%= profileData.personalInfo.phone || 'Not provided' %>
+                                </p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">Member Since</label>
+                                <p class="text-gray-900 font-medium">
+                                    <%= new Date(profileData.personalInfo.joinedDate).toLocaleDateString('en-US', { 
+                                        year: 'numeric', month: 'long', day: 'numeric' 
+                                    }) %>
+                                    <span class="text-sm text-gray-500">
+                                        (<%= profileData.statistics.accountAge %> days ago)
+                                    </span>
+                                </p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">Last Updated</label>
+                                <p class="text-gray-900 font-medium">
+                                    <%= new Date(profileData.accountInfo.updatedAt).toLocaleDateString('en-US', { 
+                                        year: 'numeric', month: 'long', day: 'numeric' 
+                                    }) %>
+                                </p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">Account Status</label>
+                                <p class="text-gray-900 font-medium">
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                                        <i class="fas fa-circle text-green-500 mr-1" style="font-size: 6px;"></i>
+                                        Active
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics & Integrations -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Account Statistics -->
+            <div class="card glass-effect">
+                <div class="card-header border-0">
+                    <h3 class="text-xl font-semibold text-gray-900">
+                        <i class="fas fa-chart-bar text-blue-600 mr-2"></i>
+                        Account Statistics
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center p-4 bg-blue-50 rounded-lg">
+                            <div class="text-2xl font-bold text-blue-600"><%= profileData.statistics.accountAge %></div>
+                            <div class="text-sm text-gray-600">Days Active</div>
+                        </div>
+                        <div class="text-center p-4 bg-green-50 rounded-lg">
+                            <div class="text-2xl font-bold text-green-600"><%= profileData.integrations.connectedBrokers %></div>
+                            <div class="text-sm text-gray-600">Connected Brokers</div>
+                        </div>
+                        <div class="text-center p-4 bg-purple-50 rounded-lg">
+                            <div class="text-2xl font-bold text-purple-600"><%= profileData.statistics.profileCompleteness %>%</div>
+                            <div class="text-sm text-gray-600">Profile Complete</div>
+                        </div>
+                        <div class="text-center p-4 bg-orange-50 rounded-lg">
+                            <div class="text-2xl font-bold text-orange-600">
+                                <%= profileData.accountInfo.subscription === 'premium' ? 'Premium' :
+                                    profileData.accountInfo.subscription === 'pro' ? 'Pro' : 'Free' %>
+                            </div>
+                            <div class="text-sm text-gray-600">Subscription</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Broker Integrations -->
+            <div class="card glass-effect">
+                <div class="card-header border-0">
+                    <h3 class="text-xl font-semibold text-gray-900">
+                        <i class="fas fa-link text-blue-600 mr-2"></i>
+                        Broker Integrations
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <% if (profileData.integrations.connectedBrokers > 0) { %>
+                        <div class="space-y-3">
+                            <% Object.entries(profileData.integrations.brokerIntegrations).forEach(([brokerId, brokerData]) => { %>
+                                <% if (brokerData.isConnected) { %>
+                                    <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                                        <div class="flex items-center gap-3">
+                                            <i class="fas fa-check-circle text-green-500"></i>
+                                            <div>
+                                                <div class="font-medium text-gray-900"><%= brokerData.brokerName %></div>
+                                                <div class="text-sm text-gray-600">
+                                                    Connected <%= new Date(brokerData.connectedAt).toLocaleDateString() %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
+                                            <%= brokerData.connectionType === 'api' ? 'API' : 'Manual' %>
+                                        </span>
+                                    </div>
+                                <% } %>
+                            <% }) %>
+                            
+                            <% if (profileData.integrations.zerodhaConnected) { %>
+                                <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                                    <div class="flex items-center gap-3">
+                                        <i class="fas fa-check-circle text-green-500"></i>
+                                        <div>
+                                            <div class="font-medium text-gray-900">Zerodha (Legacy)</div>
+                                            <div class="text-sm text-gray-600">API Integration</div>
+                                        </div>
+                                    </div>
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">API</span>
+                                </div>
+                            <% } %>
+                        </div>
+                        
+                        <div class="mt-4 text-center">
+                            <a href="/brokers" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-plus mr-1"></i>
+                                Add More Brokers
+                            </a>
+                        </div>
+                    <% } else { %>
+                        <div class="text-center py-8">
+                            <i class="fas fa-unlink text-gray-400 text-4xl mb-4"></i>
+                            <h4 class="text-lg font-medium text-gray-900 mb-2">No Brokers Connected</h4>
+                            <p class="text-gray-600 mb-4">Connect your trading accounts to track your portfolio</p>
+                            <a href="/brokers" class="btn btn-primary">
+                                <i class="fas fa-link mr-2"></i>
+                                Connect Brokers
+                            </a>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Settings -->
+        <div class="card glass-effect mb-8">
+            <div class="card-header border-0">
+                <h3 class="text-xl font-semibold text-gray-900">
+                    <i class="fas fa-shield-alt text-blue-600 mr-2"></i>
+                    Security Settings
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div>
+                                <h4 class="font-medium text-gray-900">Password</h4>
+                                <p class="text-sm text-gray-600">Last changed recently</p>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm" onclick="showChangePasswordModal()">
+                                <i class="fas fa-key mr-1"></i>
+                                Change
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div>
+                                <h4 class="font-medium text-gray-900">Two-Factor Authentication</h4>
+                                <p class="text-sm text-gray-600">Enhanced security for your account</p>
+                            </div>
+                            <button class="btn btn-outline-secondary btn-sm" disabled>
+                                <i class="fas fa-mobile-alt mr-1"></i>
+                                Coming Soon
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div>
+                                <h4 class="font-medium text-gray-900">Export Data</h4>
+                                <p class="text-sm text-gray-600">Download your account data</p>
+                            </div>
+                            <button class="btn btn-outline-primary btn-sm" onclick="exportUserData()">
+                                <i class="fas fa-download mr-1"></i>
+                                Export
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 bg-red-50 rounded-lg border border-red-200">
+                            <div>
+                                <h4 class="font-medium text-red-900">Delete Account</h4>
+                                <p class="text-sm text-red-600">Permanently delete your account</p>
+                            </div>
+                            <button class="btn btn-outline-danger btn-sm" onclick="showDeleteAccountModal()">
+                                <i class="fas fa-trash mr-1"></i>
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden file input for profile picture upload -->
+<input type="file" id="profilePictureInput" accept="image/*" style="display: none;" onchange="handleProfilePictureUpload(event)">
+
+<!-- Modals -->
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="editProfileForm" onsubmit="updateProfile(event)">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" name="name" class="form-control" value="<%= profileData.personalInfo.name %>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" name="phone" class="form-control" value="<%= profileData.personalInfo.phone || '' %>">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Change Password</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="changePasswordForm" onsubmit="changePassword(event)">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Current Password</label>
+                        <input type="password" name="currentPassword" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">New Password</label>
+                        <input type="password" name="newPassword" class="form-control" minlength="6" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Confirm New Password</label>
+                        <input type="password" name="confirmPassword" class="form-control" minlength="6" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Change Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Account Modal -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger">Delete Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="deleteAccountForm" onsubmit="deleteAccount(event)">
+                <div class="modal-body">
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        <strong>Warning:</strong> This action cannot be undone. All your data will be permanently deleted.
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Enter your password</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Type "DELETE MY ACCOUNT" to confirm</label>
+                        <input type="text" name="confirmText" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Delete Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// Profile management functions
+function showEditProfileModal() {
+    const modal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+    modal.show();
+}
+
+function showChangePasswordModal() {
+    const modal = new bootstrap.Modal(document.getElementById('changePasswordModal'));
+    modal.show();
+}
+
+function showDeleteAccountModal() {
+    const modal = new bootstrap.Modal(document.getElementById('deleteAccountModal'));
+    modal.show();
+}
+
+async function updateProfile(event) {
+    event.preventDefault();
+    
+    try {
+        showLoading('Updating profile...');
+        
+        const formData = new FormData(event.target);
+        const data = {
+            name: formData.get('name'),
+            phone: formData.get('phone')
+        };
+        
+        const response = await fetch('/profile/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showToast('Profile updated successfully!', 'success');
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            showToast(result.error || 'Failed to update profile', 'error');
+        }
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        showToast('Error updating profile', 'error');
+    } finally {
+        hideLoading();
+        const modal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+        modal.hide();
+    }
+}
+
+async function changePassword(event) {
+    event.preventDefault();
+    
+    try {
+        const formData = new FormData(event.target);
+        const data = {
+            currentPassword: formData.get('currentPassword'),
+            newPassword: formData.get('newPassword'),
+            confirmPassword: formData.get('confirmPassword')
+        };
+        
+        if (data.newPassword !== data.confirmPassword) {
+            showToast('New passwords do not match', 'error');
+            return;
+        }
+        
+        showLoading('Changing password...');
+        
+        const response = await fetch('/profile/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showToast('Password changed successfully!', 'success');
+            event.target.reset();
+        } else {
+            showToast(result.error || 'Failed to change password', 'error');
+        }
+    } catch (error) {
+        console.error('Error changing password:', error);
+        showToast('Error changing password', 'error');
+    } finally {
+        hideLoading();
+        const modal = bootstrap.Modal.getInstance(document.getElementById('changePasswordModal'));
+        modal.hide();
+    }
+}
+
+async function deleteAccount(event) {
+    event.preventDefault();
+    
+    try {
+        const formData = new FormData(event.target);
+        const data = {
+            password: formData.get('password'),
+            confirmText: formData.get('confirmText')
+        };
+        
+        if (data.confirmText !== 'DELETE MY ACCOUNT') {
+            showToast('Please type "DELETE MY ACCOUNT" to confirm', 'error');
+            return;
+        }
+        
+        showLoading('Deleting account...');
+        
+        const response = await fetch('/profile/delete-account', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showToast('Account deleted successfully. Redirecting...', 'success');
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 2000);
+        } else {
+            showToast(result.error || 'Failed to delete account', 'error');
+        }
+    } catch (error) {
+        console.error('Error deleting account:', error);
+        showToast('Error deleting account', 'error');
+    } finally {
+        hideLoading();
+    }
+}
+
+function uploadProfilePicture() {
+    document.getElementById('profilePictureInput').click();
+}
+
+async function handleProfilePictureUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+        showToast('Please select a valid image file', 'error');
+        return;
+    }
+    
+    // Validate file size (5MB limit)
+    if (file.size > 5 * 1024 * 1024) {
+        showToast('Image size must be less than 5MB', 'error');
+        return;
+    }
+    
+    try {
+        showLoading('Uploading profile picture...');
+        
+        // Convert to base64
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            try {
+                const response = await fetch('/profile/upload-picture', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ imageData: e.target.result })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('profileImage').src = result.profilePicture;
+                    showToast('Profile picture updated successfully!', 'success');
+                } else {
+                    showToast(result.error || 'Failed to upload picture', 'error');
+                }
+            } catch (error) {
+                console.error('Error uploading picture:', error);
+                showToast('Error uploading picture', 'error');
+            } finally {
+                hideLoading();
+            }
+        };
+        
+        reader.readAsDataURL(file);
+    } catch (error) {
+        console.error('Error processing image:', error);
+        showToast('Error processing image', 'error');
+        hideLoading();
+    }
+}
+
+async function exportUserData() {
+    try {
+        showLoading('Preparing your data...');
+        
+        const response = await fetch('/profile/export-data');
+        
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `project360-data-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showToast('Data exported successfully!', 'success');
+        } else {
+            showToast('Failed to export data', 'error');
+        }
+    } catch (error) {
+        console.error('Error exporting data:', error);
+        showToast('Error exporting data', 'error');
+    } finally {
+        hideLoading();
+    }
+}
+</script>

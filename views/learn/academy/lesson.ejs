@@ -1,0 +1,753 @@
+<div class="lesson-container">
+    <!-- Lesson Header -->
+    <div class="lesson-header">
+        <div class="lesson-breadcrumb">
+            <a href="/academy" class="breadcrumb-link">
+                <i class="fas fa-graduation-cap"></i>
+                Trading Academy
+            </a>
+            <i class="fas fa-chevron-right"></i>
+            <a href="/academy/section/<%= section.id %>" class="breadcrumb-link">
+                <%= section.title %>
+            </a>
+            <i class="fas fa-chevron-right"></i>
+            <span class="current-lesson"><%= lesson.title %></span>
+        </div>
+        
+        <div class="lesson-title-section">
+            <h1 class="lesson-title"><%= lesson.title %></h1>
+            <div class="lesson-meta">
+                <span class="lesson-duration">
+                    <i class="fas fa-clock"></i>
+                    ~15 mins
+                </span>
+                <span class="lesson-type">
+                    <i class="fas fa-video"></i>
+                    Video Lesson
+                </span>
+                <button class="btn btn-outline-primary btn-sm mark-complete-btn">
+                    <i class="fas fa-check"></i>
+                    Mark Complete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lesson Content -->
+    <div class="lesson-content">
+        <!-- Video Placeholder -->
+        <div class="video-container">
+            <div class="video-placeholder">
+                <div class="play-button">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="video-info">
+                    <h3><%= lesson.title %></h3>
+                    <p>Click to start the lesson</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lesson Text Content -->
+        <div class="content-section">
+            <% if (content.introduction) { %>
+                <div class="content-block">
+                    <h2>Introduction</h2>
+                    <p><%= content.introduction %></p>
+                </div>
+            <% } %>
+
+            <% if (content.keyPoints && content.keyPoints.length > 0) { %>
+                <div class="content-block">
+                    <h2>Key Points</h2>
+                    <ul class="key-points-list">
+                        <% content.keyPoints.forEach(point => { %>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                <%= point %>
+                            </li>
+                        <% }); %>
+                    </ul>
+                </div>
+            <% } %>
+
+            <% if (content.phases && content.phases.length > 0) { %>
+                <div class="content-block">
+                    <h2>Market Phases</h2>
+                    <div class="phases-grid">
+                        <% content.phases.forEach((phase, index) => { %>
+                            <div class="phase-card">
+                                <div class="phase-number"><%= index + 1 %></div>
+                                <h3><%= phase.title %></h3>
+                                <p><%= phase.description %></p>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+            <% } %>
+
+            <% if (content.types && content.types.length > 0) { %>
+                <div class="content-block">
+                    <h2>Types of Smart Money Activity</h2>
+                    <div class="types-grid">
+                        <% content.types.forEach(type => { %>
+                            <div class="type-card">
+                                <h3><%= type.title %></h3>
+                                <p><%= type.description %></p>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+            <% } %>
+
+            <% if (content.locations && content.locations.length > 0) { %>
+                <div class="content-block">
+                    <h2>Common Liquidity Locations</h2>
+                    <div class="locations-grid">
+                        <% content.locations.forEach(location => { %>
+                            <div class="location-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <%= location %>
+                            </div>
+                        <% }); %>
+                    </div>
+                </div>
+            <% } %>
+
+            <% if (content.note) { %>
+                <div class="content-block note-block">
+                    <div class="note-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="note-content">
+                        <h3>Note</h3>
+                        <p><%= content.note %></p>
+                    </div>
+                </div>
+            <% } %>
+
+            <!-- Interactive Elements -->
+            <div class="content-block">
+                <h2>Practice Exercise</h2>
+                <div class="exercise-card">
+                    <div class="exercise-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="exercise-content">
+                        <h3>Apply What You've Learned</h3>
+                        <p>Open your trading platform and try to identify the concepts learned in this lesson on a live chart. Look for the patterns and structures discussed.</p>
+                        <button class="btn btn-primary exercise-btn">
+                            <i class="fas fa-external-link-alt"></i>
+                            Open TradingView
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Section -->
+            <div class="content-block">
+                <h2>Quick Quiz</h2>
+                <div class="quiz-container">
+                    <div class="question-card">
+                        <h4>Question 1: What is the main objective of Smart Money?</h4>
+                        <div class="quiz-options">
+                            <label class="quiz-option">
+                                <input type="radio" name="q1" value="a">
+                                <span>To help retail traders make money</span>
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q1" value="b">
+                                <span>To accumulate and distribute positions efficiently</span>
+                            </label>
+                            <label class="quiz-option">
+                                <input type="radio" name="q1" value="c">
+                                <span>To create market volatility</span>
+                            </label>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary quiz-submit">Submit Quiz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lesson Navigation -->
+    <div class="lesson-navigation">
+        <div class="nav-section">
+            <h3>Continue Learning</h3>
+            <div class="nav-buttons">
+                <% const currentIndex = section.lessons.findIndex(l => l.id === lesson.id); %>
+                <% if (currentIndex > 0) { %>
+                    <a href="/academy/lesson/<%= section.id %>/<%= section.lessons[currentIndex - 1].id %>" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Previous Lesson
+                    </a>
+                <% } %>
+                
+                <% if (currentIndex < section.lessons.length - 1) { %>
+                    <a href="/academy/lesson/<%= section.id %>/<%= section.lessons[currentIndex + 1].id %>" class="btn btn-primary">
+                        Next Lesson
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                <% } else { %>
+                    <a href="/academy" class="btn btn-success">
+                        <i class="fas fa-trophy"></i>
+                        Back to Academy
+                    </a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.lesson-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.lesson-header {
+    margin-bottom: 2rem;
+}
+
+.lesson-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.breadcrumb-link {
+    color: var(--primary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.breadcrumb-link:hover {
+    text-decoration: underline;
+}
+
+.current-lesson {
+    color: var(--text);
+    font-weight: 500;
+}
+
+.lesson-title-section {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 2rem;
+    border: 2px solid var(--border);
+}
+
+.lesson-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+
+.lesson-meta {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.lesson-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.lesson-meta i {
+    color: var(--primary);
+}
+
+.video-container {
+    margin-bottom: 3rem;
+}
+
+.video-placeholder {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 12px;
+    padding: 4rem 2rem;
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.video-placeholder:hover {
+    transform: scale(1.02);
+}
+
+.video-placeholder::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+    animation: float 15s linear infinite;
+}
+
+.play-button {
+    width: 80px;
+    height: 80px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem auto;
+    font-size: 2rem;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.3);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.video-placeholder:hover .play-button {
+    background: rgba(255,255,255,0.3);
+    transform: scale(1.1);
+}
+
+.video-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+}
+
+.video-info p {
+    opacity: 0.8;
+    position: relative;
+}
+
+.content-section {
+    margin-bottom: 3rem;
+}
+
+.content-block {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border);
+}
+
+.content-block h2 {
+    color: var(--primary);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.content-block h2::before {
+    content: '';
+    width: 4px;
+    height: 24px;
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+.content-block p {
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+.key-points-list {
+    list-style: none;
+    padding: 0;
+}
+
+.key-points-list li {
+    padding: 0.75rem 0;
+    color: var(--text);
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.key-points-list i {
+    color: var(--success);
+    margin-top: 0.2rem;
+    flex-shrink: 0;
+}
+
+.phases-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.phase-card {
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.phase-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-5px);
+}
+
+.phase-number {
+    width: 40px;
+    height: 40px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin: 0 auto 1rem auto;
+}
+
+.phase-card h3 {
+    color: var(--text);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.phase-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.types-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.type-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    border-left: 4px solid var(--primary);
+}
+
+.type-card h3 {
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+
+.type-card p {
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.locations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.location-item {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text);
+}
+
+.location-item i {
+    color: var(--primary);
+}
+
+.note-block {
+    background: rgba(6, 182, 212, 0.1);
+    border: 1px solid rgba(6, 182, 212, 0.2);
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.note-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--secondary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.note-content h3 {
+    color: var(--secondary);
+    margin-bottom: 0.5rem;
+}
+
+.note-content p {
+    color: var(--text);
+    margin: 0;
+}
+
+.exercise-card {
+    background: var(--bg);
+    border: 2px solid var(--primary);
+    border-radius: 12px;
+    padding: 2rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.exercise-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.exercise-content {
+    flex: 1;
+}
+
+.exercise-content h3 {
+    color: var(--text);
+    margin-bottom: 0.5rem;
+}
+
+.exercise-content p {
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+.quiz-container {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 2rem;
+    border: 1px solid var(--border);
+}
+
+.question-card {
+    margin-bottom: 2rem;
+}
+
+.question-card h4 {
+    color: var(--text);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.quiz-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.quiz-option:hover {
+    border-color: var(--primary);
+}
+
+.quiz-option input[type="radio"] {
+    margin: 0;
+}
+
+.quiz-option span {
+    color: var(--text);
+}
+
+.lesson-navigation {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    border: 1px solid var(--border);
+}
+
+.nav-section h3 {
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.nav-buttons .btn {
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+}
+
+.mark-complete-btn.completed {
+    background: var(--success);
+    border-color: var(--success);
+    color: white;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(180deg); }
+    100% { transform: translateY(0px) rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+    .lesson-title {
+        font-size: 1.5rem;
+    }
+    
+    .lesson-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .phases-grid,
+    .types-grid,
+    .locations-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .exercise-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .nav-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+</style>
+
+<script>
+// Mark lesson as complete
+document.querySelector('.mark-complete-btn').addEventListener('click', function() {
+    const btn = this;
+    
+    // Simulate API call
+    setTimeout(() => {
+        btn.classList.add('completed');
+        btn.innerHTML = '<i class="fas fa-check"></i> Completed';
+        
+        // Show success message
+        showToast('Lesson marked as complete!', 'success');
+    }, 500);
+});
+
+// Exercise button
+document.querySelector('.exercise-btn').addEventListener('click', function() {
+    window.open('https://www.tradingview.com/', '_blank');
+});
+
+// Quiz functionality
+document.querySelector('.quiz-submit').addEventListener('click', function() {
+    const selectedAnswer = document.querySelector('input[name="q1"]:checked');
+    
+    if (!selectedAnswer) {
+        showToast('Please select an answer', 'warning');
+        return;
+    }
+    
+    if (selectedAnswer.value === 'b') {
+        showToast('Correct! Smart Money aims to accumulate and distribute efficiently.', 'success');
+    } else {
+        showToast('Not quite right. Smart Money\'s main objective is to accumulate and distribute positions efficiently.', 'error');
+    }
+});
+
+// Video placeholder click
+document.querySelector('.video-placeholder').addEventListener('click', function() {
+    showToast('Video content would start playing here', 'info');
+});
+
+// Toast notification function
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.innerHTML = `
+        <div class="toast-content">
+            <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'times' : type === 'warning' ? 'exclamation' : 'info'}-circle"></i>
+            <span>${message}</span>
+        </div>
+    `;
+    
+    toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--${type === 'success' ? 'success' : type === 'error' ? 'danger' : type === 'warning' ? 'warning' : 'secondary'});
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        z-index: 1000;
+        transform: translateX(400px);
+        transition: transform 0.3s ease;
+        max-width: 300px;
+    `;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.transform = 'translateX(0)';
+    }, 100);
+    
+    setTimeout(() => {
+        toast.style.transform = 'translateX(400px)';
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 300);
+    }, 3000);
+}
+
+// Progress tracking
+const lessonId = '<%= lesson.id %>';
+const sectionId = '<%= section.id %>';
+
+// Auto-save progress periodically
+setInterval(() => {
+    // In a real app, this would call the progress API
+    console.log('Auto-saving progress for lesson:', lessonId);
+}, 30000);
+</script>

@@ -1,0 +1,424 @@
+<div style="max-width: 700px; margin: 0 auto;">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">💬 Send Feedback to Developer</h2>
+        </div>
+        <div class="card-body">
+            <p class="text-muted mb-3">
+                Help us improve Project360! Share your thoughts, report bugs, or suggest new features. 
+                Your feedback goes directly to our development team.
+            </p>
+
+            <div id="feedbackAlert" style="display: none;" class="alert"></div>
+            
+            <form id="feedbackForm">
+                <div class="form-group">
+                    <label for="type" class="form-label">Feedback Type</label>
+                    <select id="type" name="type" class="form-control" required>
+                        <option value="">Select feedback type</option>
+                        <option value="Bug Report">🐛 Bug Report</option>
+                        <option value="Feature Request">💡 Feature Request</option>
+                        <option value="UI/UX Feedback">🎨 UI/UX Feedback</option>
+                        <option value="Performance Issue">⚡ Performance Issue</option>
+                        <option value="Security Concern">🔒 Security Concern</option>
+                        <option value="General Feedback">💬 General Feedback</option>
+                        <option value="Documentation">📚 Documentation</option>
+                        <option value="Integration Request">🔗 Integration Request</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="severity" class="form-label">Priority Level</label>
+                    <select id="severity" name="severity" class="form-control">
+                        <option value="low">🟢 Low - Nice to have</option>
+                        <option value="medium" selected>🟡 Medium - Would be helpful</option>
+                        <option value="high">🟠 High - Important</option>
+                        <option value="critical">🔴 Critical - Urgent fix needed</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="page" class="form-label">Page/Feature (optional)</label>
+                    <input type="text" id="page" name="page" class="form-control" 
+                           placeholder="e.g., Dashboard, Tax Calculator, Portfolio page">
+                </div>
+
+                <div class="form-group">
+                    <label for="message" class="form-label">Your Feedback</label>
+                    <textarea id="message" name="message" class="form-control" rows="8" 
+                              placeholder="Please describe your feedback in detail. For bug reports, include steps to reproduce the issue." 
+                              required></textarea>
+                    <small class="text-muted">
+                        💡 Tip: For bug reports, please include what you were trying to do, what happened, and what you expected to happen.
+                    </small>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <span id="submitText">Send Feedback</span>
+                    <span id="submitSpinner" style="display: none;">Sending...</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Feedback Guidelines -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h3 class="card-title">📋 Feedback Guidelines</h3>
+        </div>
+        <div class="card-body">
+            <div class="grid grid-2">
+                <div>
+                    <h4 style="color: var(--primary);">🐛 Bug Reports</h4>
+                    <ul class="text-muted" style="margin: 0;">
+                        <li>Steps to reproduce the issue</li>
+                        <li>What you expected to happen</li>
+                        <li>Screenshots if applicable</li>
+                        <li>Browser and device information</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color: var(--primary);">💡 Feature Requests</h4>
+                    <ul class="text-muted" style="margin: 0;">
+                        <li>Describe the feature you'd like</li>
+                        <li>Explain why it would be useful</li>
+                        <li>Suggest how it might work</li>
+                        <li>Include any examples or references</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid grid-3 mt-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">💬</div>
+                <h4 style="color: var(--primary);">Chat Support</h4>
+                <p class="text-muted">Need immediate help?</p>
+                <a href="/chat" class="btn btn-secondary btn-sm">Open Chat</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body text-center">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">📧</div>
+                <h4 style="color: var(--primary);">Contact Support</h4>
+                <p class="text-muted">General inquiries</p>
+                <a href="/contact" class="btn btn-secondary btn-sm">Contact Us</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body text-center">
+                <div style="font-size: 2rem; margin-bottom: 1rem;">📚</div>
+                <h4 style="color: var(--primary);">Help Center</h4>
+                <p class="text-muted">Browse documentation</p>
+                <a href="/dashboard" class="btn btn-secondary btn-sm">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.alert {
+    padding: 15px;
+    margin: 20px 0;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loading-spinner {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    z-index: 10000;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    max-width: 400px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.toast.show {
+    transform: translateX(0);
+}
+
+.toast.success {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.toast.error {
+    background: linear-gradient(135deg, #dc3545, #fd7e14);
+}
+</style>
+
+<script>
+document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    console.log('Feedback form submitted');
+    
+    const submitBtn = document.getElementById('submitBtn');
+    const submitText = document.getElementById('submitText');
+    const submitSpinner = document.getElementById('submitSpinner');
+    const alertDiv = document.getElementById('feedbackAlert');
+    
+    // Hide any previous alerts
+    alertDiv.style.display = 'none';
+    alertDiv.className = 'alert';
+    
+    // Disable button and show loading
+    submitBtn.disabled = true;
+    submitText.style.display = 'none';
+    submitSpinner.style.display = 'inline';
+    
+    console.log('Button disabled, spinner shown');
+    
+    try {
+        // Collect form data manually to avoid FormData issues
+        const data = {
+            type: document.getElementById('type').value,
+            severity: document.getElementById('severity').value,
+            page: document.getElementById('page').value,
+            message: document.getElementById('message').value
+        };
+        
+        // Add current page if not specified
+        if (!data.page) {
+            data.page = document.referrer || window.location.href;
+        }
+        
+        console.log('Form data collected:', {
+            type: data.type,
+            severity: data.severity,
+            page: data.page,
+            messageLength: data.message ? data.message.length : 0,
+            allFields: Object.keys(data)
+        });
+        
+        // Validate required fields on frontend
+        if (!data.type) {
+            throw new Error('Please select a feedback type');
+        }
+        if (!data.message || data.message.trim().length === 0) {
+            throw new Error('Please enter your feedback message');
+        }
+        
+        // Special debug for Performance Issue + Critical combination
+        if (data.type === 'Performance Issue' && data.severity === 'critical') {
+            console.log('🚨 SPECIAL DEBUG: Performance Issue + Critical detected');
+            console.log('🚨 Data values:', JSON.stringify(data));
+        }
+        
+        console.log('Sending feedback data to server...');
+        
+        let requestBody;
+        try {
+            requestBody = JSON.stringify(data);
+            console.log('✅ JSON stringify successful, body length:', requestBody.length);
+        } catch (jsonError) {
+            console.error('❌ JSON stringify failed:', jsonError);
+            console.error('❌ Problematic data:', data);
+            throw new Error('Failed to format feedback data: ' + jsonError.message);
+        }
+
+        const response = await fetch('/feedback', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: requestBody
+        });
+        
+        console.log('Response status:', response.status);
+        console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('❌ Server error response:', errorText);
+            throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+        }
+        
+        let result;
+        try {
+            result = await response.json();
+            console.log('✅ Response JSON parsed successfully:', result);
+        } catch (parseError) {
+            console.error('❌ Failed to parse response JSON:', parseError);
+            const responseText = await response.text();
+            console.error('❌ Raw response:', responseText);
+            throw new Error('Server returned invalid JSON response');
+        }
+        
+        if (result.success) {
+            console.log('Feedback sent successfully');
+            
+            // Show success message
+            alertDiv.className = 'alert alert-success';
+            alertDiv.innerHTML = `
+                <strong>✅ Feedback Sent Successfully!</strong><br>
+                ${result.message || 'Thank you for your feedback! It has been sent to our development team for review.'}
+                <br><br>
+                <small>📧 The development team has been notified and will review your feedback.</small>
+            `;
+            alertDiv.style.display = 'block';
+            
+            // Reset form
+            this.reset();
+            console.log('Form reset');
+            
+            // Scroll to alert smoothly
+            setTimeout(() => {
+                alertDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+            
+            // Show toast notification
+            showToast('✅ Feedback sent successfully! Thank you for helping us improve.', 'success');
+            
+            // Auto-hide success message after 10 seconds
+            setTimeout(() => {
+                if (alertDiv.classList.contains('alert-success')) {
+                    alertDiv.style.opacity = '0';
+                    setTimeout(() => {
+                        alertDiv.style.display = 'none';
+                        alertDiv.style.opacity = '1';
+                    }, 300);
+                }
+            }, 10000);
+            
+        } else {
+            console.error('Server returned error:', result);
+            throw new Error(result.error || 'Failed to send feedback');
+        }
+        
+    } catch (error) {
+        console.error('Feedback form error:', error);
+        
+        alertDiv.className = 'alert alert-error';
+        alertDiv.innerHTML = `
+            <strong>❌ Error:</strong><br>
+            ${error.message || 'There was an error sending your feedback. Please try again later.'}
+            <br><br>
+            <small>If this problem persists, please try refreshing the page or contact support directly.</small>
+        `;
+        alertDiv.style.display = 'block';
+        
+        // Scroll to error message
+        setTimeout(() => {
+            alertDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+        
+    } finally {
+        console.log('Re-enabling form button');
+        
+        // Re-enable button with a small delay to prevent double submission
+        setTimeout(() => {
+            submitBtn.disabled = false;
+            submitText.style.display = 'inline';
+            submitSpinner.style.display = 'none';
+        }, 500);
+    }
+});
+
+// Auto-fill current page and debug form elements
+document.addEventListener('DOMContentLoaded', function() {
+    const pageInput = document.getElementById('page');
+    if (!pageInput.value && document.referrer) {
+        const referrerPath = new URL(document.referrer).pathname;
+        const pageNames = {
+            '/dashboard': 'Dashboard',
+            '/insurance': 'Insurance Management',
+            '/portfolio': 'Portfolio Management',
+            '/advisor': 'Financial Advisor',
+            '/tax': 'Tax Calculator',
+            '/chat': 'Chat Support',
+            '/contact': 'Contact Page'
+        };
+        pageInput.value = pageNames[referrerPath] || referrerPath;
+    }
+    
+    // Debug form elements
+    console.log('Form elements found:', {
+        typeSelect: !!document.getElementById('type'),
+        severitySelect: !!document.getElementById('severity'),
+        pageInput: !!document.getElementById('page'),
+        messageTextarea: !!document.getElementById('message'),
+        form: !!document.getElementById('feedbackForm')
+    });
+    
+    // Add change listener to severity to debug
+    const severitySelect = document.getElementById('severity');
+    if (severitySelect) {
+        severitySelect.addEventListener('change', function() {
+            console.log('Severity changed to:', this.value);
+        });
+    }
+});
+
+// Toast notification function
+function showToast(message, type = 'success') {
+    // Remove any existing toasts
+    const existingToasts = document.querySelectorAll('.toast');
+    existingToasts.forEach(toast => toast.remove());
+    
+    // Create new toast
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = message;
+    
+    // Add to document
+    document.body.appendChild(toast);
+    
+    // Show toast with animation
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 100);
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 300);
+    }, 5000);
+}
+</script>

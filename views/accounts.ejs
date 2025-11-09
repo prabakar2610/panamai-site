@@ -1,0 +1,159 @@
+<h1>Bank Accounts</h1>
+
+<!-- Add Account Form -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h3 class="card-title">Add New Account</h3>
+    </div>
+    <div class="card-body">
+        <form action="/accounts" method="POST">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="accountName" class="form-label">Account Name</label>
+                    <input type="text" id="accountName" name="accountName" class="form-control" placeholder="e.g., Primary Savings" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bankName" class="form-label">Bank Name</label>
+                    <input type="text" id="bankName" name="bankName" class="form-control" placeholder="e.g., HDFC Bank" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="accountNumber" class="form-label">Account Number</label>
+                    <input type="text" id="accountNumber" name="accountNumber" class="form-control" placeholder="Enter account number" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="accountType" class="form-label">Account Type</label>
+                    <select id="accountType" name="accountType" class="form-control">
+                        <option value="savings">Savings</option>
+                        <option value="current">Current</option>
+                        <option value="credit">Credit Card</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="balance" class="form-label">Current Balance</label>
+                    <input type="number" id="balance" name="balance" class="form-control" placeholder="0" step="0.01">
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Add Account</button>
+        </form>
+    </div>
+</div>
+
+<!-- Accounts List -->
+<% if (accounts.length > 0) { %>
+    <div class="grid grid-2">
+        <% accounts.forEach(account => { %>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title"><%= account.accountName %></h3>
+                </div>
+                <div class="card-body">
+                    <div class="grid grid-2 mb-3">
+                        <div>
+                            <strong>Bank:</strong> <%= account.bankName %><br>
+                            <strong>Type:</strong> <%= account.accountType.charAt(0).toUpperCase() + account.accountType.slice(1) %><br>
+                            <strong>Account #:</strong> ****<%= account.accountNumber.slice(-4) %>
+                        </div>
+                        <div class="text-right">
+                            <div class="summary-value" style="font-size: 1.5rem;">₹ <%= account.balance.toLocaleString('en-IN') %></div>
+                            <div class="summary-label">Current Balance</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Add Transaction Form -->
+                    <details style="margin-top: 1rem;">
+                        <summary style="cursor: pointer; padding: 0.5rem; background: var(--bg); border-radius: 4px; margin-bottom: 1rem;">
+                            Add Transaction
+                        </summary>
+                        <form class="transaction-form" data-account-id="<%= account._id %>">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Date</label>
+                                    <input type="date" name="date" class="form-control" value="<%= new Date().toISOString().split('T')[0] %>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Type</label>
+                                    <select name="type" class="form-control" required>
+                                        <option value="credit">Credit (+)</option>
+                                        <option value="debit">Debit (-)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Description</label>
+                                    <input type="text" name="description" class="form-control" placeholder="Transaction description" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Amount</label>
+                                    <input type="number" name="amount" class="form-control" placeholder="0.00" step="0.01" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Category</label>
+                                <select name="category" class="form-control">
+                                    <option value="other">Other</option>
+                                    <option value="salary">Salary</option>
+                                    <option value="investment">Investment</option>
+                                    <option value="food">Food & Dining</option>
+                                    <option value="transport">Transportation</option>
+                                    <option value="utilities">Utilities</option>
+                                    <option value="entertainment">Entertainment</option>
+                                    <option value="healthcare">Healthcare</option>
+                                    <option value="shopping">Shopping</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-sm">Add Transaction</button>
+                        </form>
+                    </details>
+                    
+                    <!-- Recent Transactions -->
+                    <% if (account.transactions && account.transactions.length > 0) { %>
+                        <h4 style="margin-top: 1.5rem; margin-bottom: 1rem;">Recent Transactions</h4>
+                        <div style="max-height: 300px; overflow-y: auto;">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Description</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% account.transactions.slice().reverse().slice(0, 5).forEach(transaction => { %>
+                                        <tr>
+                                            <td><%= new Date(transaction.date).toLocaleDateString('en-IN') %></td>
+                                            <td><%= transaction.description %></td>
+                                            <td style="color: <%= transaction.type === 'credit' ? 'var(--success)' : 'var(--error)' %>">
+                                                <%= transaction.type === 'credit' ? '+' : '-' %>₹ <%= transaction.amount.toLocaleString('en-IN') %>
+                                            </td>
+                                        </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    <% } else { %>
+                        <p class="text-muted text-center">No transactions yet</p>
+                    <% } %>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+<% } else { %>
+    <div class="card">
+        <div class="card-body text-center">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">💳</div>
+            <h3>No accounts added yet</h3>
+            <p class="text-muted">Add your first bank account to start tracking your finances</p>
+        </div>
+    </div>
+<% } %>

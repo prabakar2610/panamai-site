@@ -1,0 +1,99 @@
+<%- include('../layout', { title: title, user: user }) %>
+
+<div class="container mt-4">
+  <h2>Live Markets</h2>
+  <p>Last Updated: <%= lastUpdated %></p>
+  <div class="row">
+    <div class="col-md-6">
+      <h4>Indices</h4>
+      <table class="table table-bordered">
+        <thead><tr><th>Name</th><th>Value</th><th>Change</th></tr></thead>
+        <tbody>
+        <% if (indices && indices.length) { %>
+          <% indices.forEach(function(idx) { %>
+            <tr>
+              <td><%= idx.name || idx.symbol %></td>
+              <td><%= idx.value || idx.price %></td>
+              <td class="<%= (idx.change || idx.changePercent) > 0 ? 'text-success' : 'text-danger' %>">
+                <%= idx.change || idx.changePercent %>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr><td colspan="3">No data</td></tr>
+        <% } %>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-6">
+      <h4>Market Status: <span class="badge <%= marketStatus === 'Open' ? 'bg-success' : 'bg-secondary' %>"><%= marketStatus %></span></h4>
+      <h5>Top Gainers</h5>
+      <ul>
+        <% (topGainers || []).forEach(function(stock) { %>
+          <li><%= stock.name || stock.symbol %> (<%= stock.changePercent %>%)</li>
+        <% }) %>
+      </ul>
+      <h5>Top Losers</h5>
+      <ul>
+        <% (topLosers || []).forEach(function(stock) { %>
+          <li><%= stock.name || stock.symbol %> (<%= stock.changePercent %>%)</li>
+        <% }) %>
+      </ul>
+      <h5>Volume Leaders</h5>
+      <ul>
+        <% (volumeLeaders || []).forEach(function(stock) { %>
+          <li><%= stock.name || stock.symbol %> (Vol: <%= stock.volume %>)</li>
+        <% }) %>
+      </ul>
+    </div>
+  </div>
+
+  <hr>
+  <div class="row mt-4">
+    <div class="col-md-8">
+      <h3>Mutual Fund Lumpsum Calculator</h3>
+      <form id="mf-calc-form" class="mb-3">
+        <div class="mb-2">
+          <label for="lumpSumAmount" class="form-label">Investment Amount (₹)</label>
+          <input type="number" class="form-control" id="lumpSumAmount" value="100000" min="1000" required>
+        </div>
+        <div class="mb-2">
+          <label for="expectedReturn" class="form-label">Expected Annual Return (%)</label>
+          <input type="number" class="form-control" id="expectedReturn" value="12" min="1" max="30" required>
+        </div>
+        <div class="mb-2">
+          <label for="years" class="form-label">Time Period (Years)</label>
+          <input type="number" class="form-control" id="years" value="10" min="1" max="50" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Calculate</button>
+      </form>
+      <div id="mf-calc-result" class="alert alert-info" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Mutual Fund Lumpsum Calculator logic
+function calculateLumpSum(amount, rate, years) {
+  const r = rate / 100;
+  return amount * Math.pow(1 + r, years);
+}
+
+document.getElementById('mf-calc-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const amount = parseFloat(document.getElementById('lumpSumAmount').value);
+  const rate = parseFloat(document.getElementById('expectedReturn').value);
+  const years = parseFloat(document.getElementById('years').value);
+  if (amount > 0 && rate > 0 && years > 0) {
+    const maturity = calculateLumpSum(amount, rate, years);
+    const gain = maturity - amount;
+    document.getElementById('mf-calc-result').style.display = 'block';
+    document.getElementById('mf-calc-result').innerHTML =
+      `<strong>Maturity Value:</strong> ₹${maturity.toLocaleString(undefined, {maximumFractionDigits:0})}<br>` +
+      `<strong>Total Gain:</strong> ₹${gain.toLocaleString(undefined, {maximumFractionDigits:0})}`;
+  } else {
+    document.getElementById('mf-calc-result').style.display = 'block';
+    document.getElementById('mf-calc-result').innerHTML = 'Please enter valid values.';
+  }
+});
+</script>

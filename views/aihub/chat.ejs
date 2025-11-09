@@ -1,0 +1,440 @@
+<div class="chat-container">
+    <div class="chat-header">
+        <div class="chat-header-info">
+            <div class="chat-avatar">💬</div>
+            <div class="chat-details">
+                <h3><%= chat.title %></h3>
+                <span class="chat-status">
+                    <span class="status-indicator <%= chat.status %>"></span>
+                    <%= chat.status.charAt(0).toUpperCase() + chat.status.slice(1) %>
+                </span>
+            </div>
+        </div>
+        <div class="chat-actions">
+            <button class="btn btn-sm btn-secondary" onclick="refreshMessages()">🔄</button>
+        </div>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+        <% chat.messages.forEach(message => { %>
+            <div class="message <%= message.senderId.toString() === user.id ? 'sent' : 'received' %>">
+                <div class="message-content">
+                    <div class="message-text"><%= message.message %></div>
+                    <div class="message-time"><%= new Date(message.timestamp).toLocaleTimeString() %></div>
+                </div>
+                <% if (message.senderId.toString() === user.id) { %>
+                    <div class="message-status">
+                        <%= message.isRead ? '✓✓' : '✓' %>
+                    </div>
+                <% } %>
+            </div>
+        <% }); %>
+    </div>
+
+    <div class="chat-input-container">
+        <form id="messageForm" class="chat-input-form">
+            <input type="hidden" id="chatId" value="<%= chat._id %>">
+            <div class="chat-input-wrapper">
+                <input 
+                    type="text" 
+                    id="messageInput" 
+                    placeholder="Type a message..." 
+                    class="chat-input"
+                    maxlength="1000"
+                    required
+                >
+                <button type="submit" class="send-button">
+                    <span class="send-icon">➤</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.chat-container {
+    max-width: 800px;
+    margin: 0 auto;
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-primary);
+    overflow: hidden;
+}
+
+.chat-header {
+    padding: 1rem;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.chat-header-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.chat-avatar {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.chat-details h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.chat-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+}
+
+.status-indicator.pending {
+    background: #fbbf24;
+}
+
+.status-indicator.closed {
+    background: #ef4444;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    background: #f8fafc;
+    background-image: 
+        radial-gradient(circle at 1px 1px, rgba(0,0,0,0.05) 1px, transparent 0);
+    background-size: 20px 20px;
+}
+
+.message {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+}
+
+.message.sent {
+    justify-content: flex-end;
+}
+
+.message.received {
+    justify-content: flex-start;
+}
+
+.message-content {
+    max-width: 70%;
+    background: white;
+    border-radius: 18px;
+    padding: 0.75rem 1rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.message.sent .message-content {
+    background: var(--primary);
+    color: white;
+}
+
+.message-text {
+    word-wrap: break-word;
+    line-height: 1.4;
+}
+
+.message-time {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    margin-top: 0.25rem;
+    text-align: right;
+}
+
+.message.received .message-time {
+    text-align: left;
+}
+
+.message-status {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    align-self: flex-end;
+    margin-bottom: 0.25rem;
+}
+
+.chat-input-container {
+    padding: 1rem;
+    background: var(--bg-primary);
+    border-top: 1px solid var(--border);
+}
+
+.chat-input-form {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chat-input-wrapper {
+    flex: 1;
+    display: flex;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 25px;
+    overflow: hidden;
+    align-items: center;
+}
+
+.chat-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    background: transparent;
+}
+
+.send-button {
+    background: var(--primary);
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-right: 0.25rem;
+}
+
+.send-button:hover {
+    background: var(--primary-dark);
+}
+
+.send-button:disabled {
+    background: var(--text-muted);
+    cursor: not-allowed;
+}
+
+.send-icon {
+    font-size: 1rem;
+    transform: rotate(-45deg);
+}
+
+/* Scrollbar styling */
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .chat-container {
+        height: calc(100vh - 60px);
+        border-radius: 0;
+        margin: 0;
+    }
+    
+    .message-content {
+        max-width: 85%;
+    }
+}
+
+/* Loading animation */
+.message.loading .message-content {
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+}
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem;
+}
+
+.typing-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    animation: typing 1.5s infinite;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 60%, 100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+    30% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+</style>
+
+<script>
+let chatId = '<%= chat._id %>';
+let userId = '<%= user.id %>';
+let isPolling = false;
+
+// Send message function
+document.getElementById('messageForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const messageInput = document.getElementById('messageInput');
+    const message = messageInput.value.trim();
+    
+    if (!message) return;
+    
+    const sendButton = document.querySelector('.send-button');
+    sendButton.disabled = true;
+    messageInput.disabled = true;
+    
+    try {
+        // Add message to UI immediately
+        addMessageToUI({
+            senderId: userId,
+            senderName: '<%= user.name %>',
+            message: message,
+            timestamp: new Date()
+        }, true);
+        
+        // Clear input
+        messageInput.value = '';
+        
+        // Send to server
+        const response = await fetch('/chat/send', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: message,
+                chatId: chatId
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to send message');
+        }
+        
+        // Refresh messages after a short delay to get the auto-response
+        setTimeout(refreshMessages, 3000);
+        
+    } catch (error) {
+        console.error('Error sending message:', error);
+        alert('Failed to send message. Please try again.');
+    } finally {
+        sendButton.disabled = false;
+        messageInput.disabled = false;
+        messageInput.focus();
+    }
+});
+
+// Add message to UI
+function addMessageToUI(message, isSent = false) {
+    const messagesContainer = document.getElementById('chatMessages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${isSent ? 'sent' : 'received'}`;
+    
+    const time = new Date(message.timestamp).toLocaleTimeString();
+    
+    messageDiv.innerHTML = `
+        <div class="message-content">
+            <div class="message-text">${message.message}</div>
+            <div class="message-time">${time}</div>
+        </div>
+        ${isSent ? '<div class="message-status">✓</div>' : ''}
+    `;
+    
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+// Refresh messages
+async function refreshMessages() {
+    if (isPolling) return;
+    isPolling = true;
+    
+    try {
+        const response = await fetch(`/chat/messages/${chatId}`);
+        if (!response.ok) throw new Error('Failed to refresh messages');
+        
+        const data = await response.json();
+        
+        // Clear current messages
+        const messagesContainer = document.getElementById('chatMessages');
+        messagesContainer.innerHTML = '';
+        
+        // Add all messages
+        data.messages.forEach(message => {
+            addMessageToUI(message, message.senderId === userId);
+        });
+        
+    } catch (error) {
+        console.error('Error refreshing messages:', error);
+    } finally {
+        isPolling = false;
+    }
+}
+
+// Auto-refresh messages every 30 seconds (reduced frequency)
+setInterval(refreshMessages, 30000);
+
+// Focus on input when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('messageInput').focus();
+    
+    // Scroll to bottom
+    const messagesContainer = document.getElementById('chatMessages');
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+});
+
+// Enter key to send message
+document.getElementById('messageInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        document.getElementById('messageForm').dispatchEvent(new Event('submit'));
+    }
+});
+</script>

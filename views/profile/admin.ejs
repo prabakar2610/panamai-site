@@ -1,0 +1,73 @@
+<%- include('../layout', { title: 'Admin Terminal', user: user }) %>
+<div class="container mt-4">
+  <h2>Admin Terminal</h2>
+  <div id="admin-users-section">
+    <h4>User Management</h4>
+    <div id="user-list-loading">Loading users...</div>
+    <table class="table table-bordered" id="user-list-table" style="display:none;">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Subscription</th>
+          <th>Full Access</th>
+          <th>Admin</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="user-list-body"></tbody>
+    </table>
+  </div>
+</div>
+<script>
+async function fetchUsers() {
+  const res = await fetch('/api/admin/users');
+  if (!res.ok) return [];
+  return res.json();
+}
+
+function renderUsers(users) {
+  const tbody = document.getElementById('user-list-body');
+  tbody.innerHTML = '';
+  users.forEach(user => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${user.email}</td>
+      <td>
+        <select data-id="${user._id}" class="sub-select">
+          <option value="free" ${user.subscription==='free'?'selected':''}>Free</option>
+          <option value="pro" ${user.subscription==='pro'?'selected':''}>Pro</option>
+          <option value="premium" ${user.subscription==='premium'?'selected':''}>Premium</option>
+        </select>
+      </td>
+      <td><input type="checkbox" data-id="${user._id}" class="full-access-toggle" ${user.isFullAccess?'checked':''}></td>
+      <td><input type="checkbox" data-id="${user._id}" class="admin-toggle" ${user.isAdmin?'checked':''}></td>
+      <td><button class="btn btn-sm btn-primary save-btn" data-id="${user._id}">Save</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('user-list-table').style.display = '';
+  document.getElementById('user-list-loading').style.display = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const users = await fetchUsers();
+  renderUsers(users);
+
+  document.getElementById('user-list-body').addEventListener('click', async (e) => {
+    if (e.target.classList.contains('save-btn')) {
+      const id = e.target.getAttribute('data-id');
+      const row = e.target.closest('tr');
+      const subscription = row.querySelector('.sub-select').value;
+      const isFullAccess = row.querySelector('.full-access-toggle').checked;
+      const isAdmin = row.querySelector('.admin-toggle').checked;
+      await fetch(`/api/admin/users/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subscription, isFullAccess, isAdmin })
+      });
+      e.target.textContent = 'Saved!';
+      setTimeout(() => e.target.textContent = 'Save', 1000);
+    }
+  });
+});
+</script>

@@ -1,0 +1,405 @@
+<div class="page-header">
+    <h1>Financial Advisor</h1>
+    <p class="text-muted">AI-powered financial insights and recommendations</p>
+</div>
+
+<div class="row">
+    <!-- Financial Health Score -->
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3>Financial Health Overview</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="health-score">
+                            <div class="score-circle">
+                                <span class="score-number">75</span>
+                                <span class="score-label">Health Score</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="health-metrics">
+                            <div class="metric">
+                                <span class="metric-label">Emergency Fund</span>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" style="width: 60%"></div>
+                                </div>
+                                <span class="metric-value">6 months covered</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Debt-to-Income Ratio</span>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" style="width: 30%"></div>
+                                </div>
+                                <span class="metric-value">30% (Good)</span>
+                            </div>
+                            <div class="metric">
+                                <span class="metric-label">Investment Diversification</span>
+                                <div class="metric-bar">
+                                    <div class="metric-fill" style="width: 80%"></div>
+                                </div>
+                                <span class="metric-value">Well Diversified</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <!-- Personalized Recommendations -->
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>Personalized Recommendations</h3>
+            </div>
+            <div class="card-body">
+                <% if (advice && advice.recommendations) { %>
+                    <% advice.recommendations.forEach((rec, index) => { %>
+                        <div class="recommendation-card">
+                            <div class="recommendation-header">
+                                <span class="recommendation-priority <%= rec.priority %>"><%= rec.priority.toUpperCase() %></span>
+                                <h4><%= rec.title %></h4>
+                            </div>
+                            <p><%= rec.description %></p>
+                            <% if (rec.action) { %>
+                                <div class="recommendation-action">
+                                    <strong>Action:</strong> <%= rec.action %>
+                                </div>
+                            <% } %>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="recommendation-card">
+                        <div class="recommendation-header">
+                            <span class="recommendation-priority high">HIGH</span>
+                            <h4>Build Emergency Fund</h4>
+                        </div>
+                        <p>Start building an emergency fund that covers 6-12 months of your expenses. This provides financial security during unexpected situations.</p>
+                        <div class="recommendation-action">
+                            <strong>Action:</strong> Set aside 20% of your monthly income in a high-yield savings account.
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card">
+                        <div class="recommendation-header">
+                            <span class="recommendation-priority medium">MEDIUM</span>
+                            <h4>Diversify Your Portfolio</h4>
+                        </div>
+                        <p>Consider diversifying your investments across different asset classes to reduce risk and optimize returns.</p>
+                        <div class="recommendation-action">
+                            <strong>Action:</strong> Allocate 60% equity, 30% debt, and 10% alternative investments.
+                        </div>
+                    </div>
+
+                    <div class="recommendation-card">
+                        <div class="recommendation-header">
+                            <span class="recommendation-priority low">LOW</span>
+                            <h4>Review Insurance Coverage</h4>
+                        </div>
+                        <p>Ensure you have adequate life and health insurance coverage to protect your family's financial future.</p>
+                        <div class="recommendation-action">
+                            <strong>Action:</strong> Consider increasing your life insurance to 10-15 times your annual income.
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h3>Quick Actions</h3>
+            </div>
+            <div class="card-body">
+                <div class="quick-action">
+                    <h5>📊 Portfolio Analysis</h5>
+                    <p>Get detailed insights about your investment portfolio performance and allocation.</p>
+                    <button class="btn btn-primary btn-sm w-full" onclick="analyzePortfolio()">Analyze Now</button>
+                </div>
+
+                <div class="quick-action">
+                    <h5>🎯 Goal Planning</h5>
+                    <p>Set and track your financial goals with personalized recommendations.</p>
+                    <button class="btn btn-secondary btn-sm w-full" onclick="planGoals()">Plan Goals</button>
+                </div>
+
+                <div class="quick-action">
+                    <h5>💡 Tax Optimization</h5>
+                    <p>Discover tax-saving opportunities and optimize your tax strategy.</p>
+                    <button class="btn btn-info btn-sm w-full" onclick="optimizeTax()">Optimize Tax</button>
+                </div>
+
+                <div class="quick-action">
+                    <h5>🔄 Rebalancing</h5>
+                    <p>Check if your portfolio needs rebalancing based on your risk profile.</p>
+                    <button class="btn btn-warning btn-sm w-full" onclick="rebalancePortfolio()">Check Balance</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Market Insights -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h3>Market Insights</h3>
+            </div>
+            <div class="card-body">
+                <div class="market-insight">
+                    <h6>📈 Market Trend</h6>
+                    <p class="text-success">Bull Market - Consider equity investments</p>
+                </div>
+                <div class="market-insight">
+                    <h6>💰 Interest Rates</h6>
+                    <p class="text-info">Rising rates - Review debt investments</p>
+                </div>
+                <div class="market-insight">
+                    <h6>🏆 Top Performer</h6>
+                    <p class="text-primary">Technology sector showing strong growth</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Financial Tips -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3>Weekly Financial Tips</h3>
+            </div>
+            <div class="card-body">
+                <div class="tips-grid">
+                    <div class="tip-card">
+                        <div class="tip-icon">💰</div>
+                        <h5>50-30-20 Rule</h5>
+                        <p>Allocate 50% for needs, 30% for wants, and 20% for savings and debt repayment.</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">📱</div>
+                        <h5>Automate Savings</h5>
+                        <p>Set up automatic transfers to your savings account on payday to build wealth consistently.</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">📚</div>
+                        <h5>Financial Education</h5>
+                        <p>Spend 15 minutes daily learning about personal finance and investment strategies.</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">🎯</div>
+                        <h5>Review Goals Monthly</h5>
+                        <p>Review and adjust your financial goals monthly to stay on track with your plans.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.health-score {
+    text-align: center;
+}
+
+.score-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(var(--success) 270deg, var(--bg-secondary) 270deg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    position: relative;
+}
+
+.score-circle::before {
+    content: '';
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: var(--bg-primary);
+}
+
+.score-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--success);
+    z-index: 1;
+}
+
+.score-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    z-index: 1;
+}
+
+.health-metrics {
+    padding-left: 2rem;
+}
+
+.metric {
+    margin-bottom: 1.5rem;
+}
+
+.metric-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.metric-bar {
+    height: 8px;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.metric-fill {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.metric-value {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.recommendation-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    background: var(--bg-secondary);
+}
+
+.recommendation-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.recommendation-priority {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+.recommendation-priority.high {
+    background: var(--error);
+    color: white;
+}
+
+.recommendation-priority.medium {
+    background: var(--warning);
+    color: white;
+}
+
+.recommendation-priority.low {
+    background: var(--info);
+    color: white;
+}
+
+.recommendation-action {
+    background: var(--bg-primary);
+    padding: 1rem;
+    border-radius: 6px;
+    margin-top: 1rem;
+    border-left: 4px solid var(--primary);
+}
+
+.quick-action {
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    background: var(--bg-secondary);
+}
+
+.quick-action h5 {
+    margin-bottom: 0.5rem;
+}
+
+.quick-action p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+.market-insight {
+    padding: 0.75rem;
+    border-left: 3px solid var(--primary);
+    margin-bottom: 1rem;
+    background: var(--bg-secondary);
+}
+
+.market-insight h6 {
+    margin-bottom: 0.5rem;
+}
+
+.market-insight p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.tip-card {
+    text-align: center;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-secondary);
+}
+
+.tip-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.tip-card h5 {
+    margin-bottom: 0.5rem;
+}
+
+.tip-card p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+</style>
+
+<script>
+function analyzePortfolio() {
+    alert('Portfolio analysis feature coming soon! This will provide detailed insights about your investment performance.');
+}
+
+function planGoals() {
+    alert('Goal planning feature coming soon! Set up financial goals like buying a house, retirement planning, etc.');
+}
+
+function optimizeTax() {
+    window.location.href = '/tax';
+}
+
+function rebalancePortfolio() {
+    alert('Portfolio rebalancing feature coming soon! We will analyze your current allocation and suggest optimal rebalancing.');
+}
+</script>

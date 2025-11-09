@@ -1,0 +1,488 @@
+<div class="section-container">
+    <!-- Section Header -->
+    <div class="section-header">
+        <div class="section-breadcrumb">
+            <a href="/academy" class="breadcrumb-link">
+                <i class="fas fa-graduation-cap"></i>
+                Trading Academy
+            </a>
+            <i class="fas fa-chevron-right"></i>
+            <span class="current-section"><%= section.title %></span>
+        </div>
+        
+        <div class="section-hero">
+            <div class="section-icon-large">
+                <i class="<%= section.icon %>"></i>
+            </div>
+            <div class="section-content">
+                <h1 class="section-title"><%= section.title %></h1>
+                <p class="section-description"><%= section.description %></p>
+                <div class="section-stats">
+                    <div class="stat">
+                        <i class="fas fa-video"></i>
+                        <span><%= section.lessons.length %> Lessons</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-clock"></i>
+                        <span>~<%= Math.ceil(section.lessons.length * 15) %> mins</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-certificate"></i>
+                        <span>Certificate Available</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Overview -->
+    <div class="progress-overview">
+        <h3>Your Progress</h3>
+        <div class="progress-bar-container">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+            <span class="progress-text">0 of <%= section.lessons.length %> lessons completed (0%)</span>
+        </div>
+    </div>
+
+    <!-- Lessons Grid -->
+    <div class="lessons-container">
+        <h3>Course Content</h3>
+        <div class="lessons-grid">
+            <% section.lessons.forEach((lesson, index) => { %>
+                <div class="lesson-card" data-lesson-id="<%= lesson.id %>">
+                    <div class="lesson-header">
+                        <div class="lesson-number">
+                            <span><%= index + 1 %></span>
+                        </div>
+                        <div class="lesson-info">
+                            <h4 class="lesson-title"><%= lesson.title %></h4>
+                            <div class="lesson-meta">
+                                <span class="lesson-duration">
+                                    <i class="fas fa-clock"></i>
+                                    ~15 mins
+                                </span>
+                                <span class="lesson-type">
+                                    <i class="fas fa-play-circle"></i>
+                                    Video Lesson
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="lesson-status">
+                        <% if (lesson.completed) { %>
+                            <i class="fas fa-check-circle completed"></i>
+                        <% } else { %>
+                            <i class="fas fa-circle not-started"></i>
+                        <% } %>
+                    </div>
+                    
+                    <div class="lesson-actions">
+                        <a href="/academy/lesson/<%= section.id %>/<%= lesson.id %>" class="btn btn-primary">
+                            <% if (lesson.completed) { %>
+                                <i class="fas fa-redo"></i>
+                                Review
+                            <% } else { %>
+                                <i class="fas fa-play"></i>
+                                Start
+                            <% } %>
+                        </a>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+
+    <!-- Next Steps -->
+    <div class="next-steps">
+        <h3>Ready to Start Learning?</h3>
+        <p>Begin with the first lesson and work your way through the entire section at your own pace.</p>
+        <div class="action-buttons">
+            <a href="/academy/lesson/<%= section.id %>/<%= section.lessons[0].id %>" class="btn btn-primary btn-lg">
+                <i class="fas fa-play"></i>
+                Start First Lesson
+            </a>
+            <a href="/academy" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i>
+                Back to Academy
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.section-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.section-header {
+    margin-bottom: 3rem;
+}
+
+.section-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.breadcrumb-link {
+    color: var(--primary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.breadcrumb-link:hover {
+    text-decoration: underline;
+}
+
+.current-section {
+    color: var(--text);
+    font-weight: 500;
+}
+
+.section-hero {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    border: 2px solid var(--border);
+}
+
+.section-icon-large {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 3rem;
+    flex-shrink: 0;
+}
+
+.section-content {
+    flex: 1;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+
+.section-description {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.section-stats {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.stat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.stat i {
+    color: var(--primary);
+}
+
+.progress-overview {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    border: 1px solid var(--border);
+}
+
+.progress-overview h3 {
+    color: var(--text);
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+}
+
+.progress-bar-container {
+    margin-bottom: 1rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background: var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 5px;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.lessons-container h3 {
+    color: var(--text);
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+}
+
+.lessons-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.lesson-card {
+    background: var(--bg-secondary);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.lesson-card:hover {
+    border-color: var(--primary);
+    transform: translateX(5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.lesson-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.lesson-number {
+    width: 40px;
+    height: 40px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.lesson-info {
+    flex: 1;
+}
+
+.lesson-title {
+    color: var(--text);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.lesson-meta {
+    display: flex;
+    gap: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+.lesson-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.lesson-meta i {
+    color: var(--primary);
+}
+
+.lesson-status {
+    margin-right: 1rem;
+}
+
+.lesson-status i {
+    font-size: 1.5rem;
+}
+
+.lesson-status .completed {
+    color: #22c55e;
+}
+
+.lesson-status .not-started {
+    color: var(--border);
+}
+
+.lesson-actions .btn {
+    min-width: 100px;
+}
+
+.next-steps {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    text-align: center;
+    color: white;
+    margin-bottom: 3rem;
+}
+
+.next-steps h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.next-steps p {
+    opacity: 0.9;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.action-buttons .btn {
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+}
+
+.btn-outline-secondary {
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: white;
+}
+
+.btn-outline-secondary:hover {
+    background: rgba(255,255,255,0.2);
+    border-color: rgba(255,255,255,0.5);
+}
+
+@media (max-width: 768px) {
+    .section-hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem 1.5rem;
+    }
+    
+    .section-icon-large {
+        width: 80px;
+        height: 80px;
+        font-size: 2.5rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .section-stats {
+        justify-content: center;
+    }
+    
+    .lesson-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .lesson-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .lesson-meta {
+        justify-content: center;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+</style>
+
+<script>
+// Add click handler for lesson cards
+document.querySelectorAll('.lesson-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+        // Don't navigate if clicking on the action button
+        if (e.target.closest('.lesson-actions')) return;
+        
+        const link = card.querySelector('.lesson-actions a');
+        if (link) {
+            window.location.href = link.href;
+        }
+    });
+});
+
+// Progress tracking simulation (in real app this would come from backend)
+function updateProgress() {
+    const completedLessons = document.querySelectorAll('.lesson-status .completed').length;
+    const totalLessons = <%= section.lessons.length %>;
+    const percentage = Math.round((completedLessons / totalLessons) * 100);
+    
+    const progressFill = document.querySelector('.progress-fill');
+    const progressText = document.querySelector('.progress-text');
+    
+    if (progressFill && progressText) {
+        progressFill.style.width = percentage + '%';
+        progressText.textContent = `${completedLessons} of ${totalLessons} lessons completed (${percentage}%)`;
+    }
+}
+
+// Initialize progress
+updateProgress();
+
+// Animate lesson cards on scroll
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.lesson-card').forEach((card, index) => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(30px)';
+    card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+    observer.observe(card);
+});
+</script>

@@ -1,0 +1,267 @@
+<!-- Course Header -->
+<div style="background: linear-gradient(135deg, var(--primary) 0%, #1e3f7a 100%); color: white; padding: 3rem 2rem; margin: -2rem -2rem 3rem -2rem; border-radius: 0 0 20px 20px;">
+    <div style="max-width: 1000px; margin: 0 auto;">
+        <!-- Breadcrumb -->
+        <div style="margin-bottom: 1rem; opacity: 0.8;">
+            <a href="/academy" style="color: white; text-decoration: none;">🎓 Academy</a>
+            <span style="margin: 0 1rem;">›</span>
+            <span><%= course.title %></span>
+        </div>
+        
+        <!-- Course Title -->
+        <h1 style="font-size: 3rem; margin-bottom: 1rem; font-weight: 700;"><%= course.title %></h1>
+        <p style="font-size: 1.3rem; margin-bottom: 2rem; opacity: 0.9;"><%= course.description %></p>
+        
+        <!-- Course Stats -->
+        <div style="display: flex; gap: 3rem; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-book-open"></i>
+                <span><%= course.lessons.length %> Lessons</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-clock"></i>
+                <span>~2 hours total</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-users"></i>
+                <span>1,247+ students</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-star"></i>
+                <span>4.8/5 rating</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Course Content -->
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; max-width: 1200px; margin: 0 auto;">
+    <!-- Main Content -->
+    <div>
+        <!-- Course Overview -->
+        <div class="card" style="padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+            <h2 style="color: var(--primary); margin-bottom: 1.5rem;">📚 What You'll Learn</h2>
+            <div style="display: grid; gap: 1rem;">
+                <% if (courseId === 'beginner') { %>
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                        <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.2rem;"></i>
+                        <span>Fundamental trading concepts and market basics</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                        <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.2rem;"></i>
+                        <span>Understanding supply and demand in markets</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                        <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.2rem;"></i>
+                        <span>Market structure and phases</span>
+                    </div>
+                <% } else if (courseId === 'smartMoney') { %>
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                        <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.2rem;"></i>
+                        <span>Identify Smart Money institutional behavior</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                        <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.2rem;"></i>
+                        <span>Trade order blocks and liquidity zones</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                        <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.2rem;"></i>
+                        <span>Advanced market structure analysis</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                        <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.2rem;"></i>
+                        <span>Stop hunting and liquidity concepts</span>
+                    </div>
+                <% } else { %>
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                        <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.2rem;"></i>
+                        <span>Professional trading strategies</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                        <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.2rem;"></i>
+                        <span>Real-world application techniques</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 8px;">
+                        <i class="fas fa-check-circle" style="color: var(--success); font-size: 1.2rem;"></i>
+                        <span>Market analysis and entry strategies</span>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- Course Curriculum -->
+        <div class="card" style="padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+            <h2 style="color: var(--primary); margin-bottom: 1.5rem;">📋 Course Curriculum</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <% course.lessons.forEach(function(lesson, index) { %>
+                    <div style="border: 1px solid var(--border); border-radius: 8px; overflow: hidden;">
+                        <div style="background: var(--bg-secondary); padding: 1rem; cursor: pointer;" onclick="toggleLesson(<%= index %>)">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <div style="width: 30px; height: 30px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                                        <%= index + 1 %>
+                                    </div>
+                                    <div>
+                                        <h4 style="color: var(--text); margin: 0; font-size: 1.1rem;"><%= lesson.title %></h4>
+                                        <p style="color: var(--text-muted); margin: 0; font-size: 0.9rem;"><%= lesson.description %></p>
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <span style="background: 
+                                        <% if (lesson.difficulty === 'Beginner') { %>
+                                            #22c55e
+                                        <% } else if (lesson.difficulty === 'Intermediate') { %>
+                                            #3b82f6
+                                        <% } else { %>
+                                            #dc2626
+                                        <% } %>
+                                        ; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem; font-weight: 600;">
+                                        <%= lesson.difficulty %>
+                                    </span>
+                                    <span style="color: var(--text-muted); font-size: 0.9rem;"><%= lesson.duration %></span>
+                                    <i class="fas fa-chevron-down" style="color: var(--text-muted); transition: transform 0.3s ease;" id="chevron-<%= index %>"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="background: white; border-top: 1px solid var(--border); display: none;" id="lesson-content-<%= index %>">
+                            <div style="padding: 1.5rem;">
+                                <p style="color: var(--text-muted); margin-bottom: 1rem; line-height: 1.6;">
+                                    <%= lesson.content.overview %>
+                                </p>
+                                <a href="/academy/course/<%= courseId %>/lesson/<%= lesson.id %>" class="btn btn-primary">
+                                    <i class="fas fa-play"></i>
+                                    Start Lesson
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div>
+        <!-- Start Course -->
+        <div class="card" style="padding: 2rem; border-radius: 12px; margin-bottom: 2rem; text-align: center;">
+            <h3 style="color: var(--primary); margin-bottom: 1rem;">Ready to Start?</h3>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Begin your learning journey with the first lesson</p>
+            <a href="/academy/course/<%= courseId %>/lesson/<%= course.lessons[0].id %>" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+                <i class="fas fa-play"></i>
+                Start First Lesson
+            </a>
+        </div>
+
+        <!-- Prerequisites -->
+        <div class="card" style="padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
+            <h4 style="color: var(--primary); margin-bottom: 1rem;">Prerequisites</h4>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <% if (courseId === 'beginner') { %>
+                    <li style="color: var(--text-muted); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-check" style="color: var(--success);"></i>
+                        No prior trading experience required
+                    </li>
+                    <li style="color: var(--text-muted); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-check" style="color: var(--success);"></i>
+                        Basic computer skills
+                    </li>
+                <% } else if (courseId === 'smartMoney') { %>
+                    <li style="color: var(--text-muted); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-check" style="color: var(--success);"></i>
+                        Complete Beginner Trading Course
+                    </li>
+                    <li style="color: var(--text-muted); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-check" style="color: var(--success);"></i>
+                        Understanding of basic price action
+                    </li>
+                    <li style="color: var(--text-muted); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-check" style="color: var(--success);"></i>
+                        Risk management knowledge
+                    </li>
+                <% } else { %>
+                    <li style="color: var(--text-muted); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-check" style="color: var(--success);"></i>
+                        Basic trading knowledge
+                    </li>
+                    <li style="color: var(--text-muted); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-check" style="color: var(--success);"></i>
+                        Chart reading ability
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+
+        <!-- Course Features -->
+        <div class="card" style="padding: 1.5rem; border-radius: 12px;">
+            <h4 style="color: var(--primary); margin-bottom: 1rem;">Course Features</h4>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="color: var(--text-muted); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-infinity" style="color: var(--primary);"></i>
+                    Lifetime access
+                </li>
+                <li style="color: var(--text-muted); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-mobile-alt" style="color: var(--primary);"></i>
+                    Mobile friendly
+                </li>
+                <li style="color: var(--text-muted); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-chart-line" style="color: var(--primary);"></i>
+                    Live market examples
+                </li>
+                <li style="color: var(--text-muted); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-comments" style="color: var(--primary);"></i>
+                    Interactive exercises
+                </li>
+                <li style="color: var(--text-muted); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-certificate" style="color: var(--primary);"></i>
+                    Course completion certificate
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleLesson(index) {
+    const content = document.getElementById(`lesson-content-${index}`);
+    const chevron = document.getElementById(`chevron-${index}`);
+    
+    if (content.style.display === 'none' || content.style.display === '') {
+        content.style.display = 'block';
+        chevron.style.transform = 'rotate(180deg)';
+    } else {
+        content.style.display = 'none';
+        chevron.style.transform = 'rotate(0deg)';
+    }
+}
+
+// Add some loading animation
+document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.card');
+    cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            card.style.transition = 'all 0.5s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 100);
+    });
+});
+</script>
+
+<style>
+@media (max-width: 768px) {
+    div[style*="grid-template-columns: 2fr 1fr"] {
+        grid-template-columns: 1fr;
+    }
+    
+    div[style*="display: flex; gap: 3rem"] {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+.card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+</style>
