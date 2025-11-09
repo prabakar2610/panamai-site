@@ -1,0 +1,17 @@
+/* PanamAI unified theme */
+:root{
+  --bg:#0e172a;--text:#e8eef8;--accent:#00a3ff;--muted:#9ba6b5;
+  --card:#16233a;--radius:14px;--maxw:1000px;
+  font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto;
+}
+body{margin:0;background:var(--bg);color:var(--text);}
+a{color:var(--accent);text-decoration:none;}
+header,footer{background:#0a1220;padding:20px 0;text-align:center;}
+header h1{margin:0;color:var(--accent);}
+nav a{margin:0 10px;color:var(--muted);}
+.container{max-width:var(--maxw);margin:0 auto;padding:30px;}
+.grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
+.card{background:var(--card);padding:20px;border-radius:var(--radius);}
+.card h2{margin-top:0;color:var(--accent);}
+.btn{display:inline-block;padding:10px 16px;background:var(--accent);color:#041628;border-radius:8px;margin-top:8px;font-weight:600;}
+footer p{color:var(--muted);margin:4px 0;}
